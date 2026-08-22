@@ -7,6 +7,7 @@ SuperExtensions 是一款面向 Claude Code、Codex、OpenCode、Pi、Hermes Age
 | Skill | 用途 |
 |---|---|
 | [`constitution`](./skills/constitution/SKILL.md) | 全局规则总纲，定义语言、沟通和工作纪律等基础约束。 |
+| [`management`](./skills/management/SKILL.md) | 全场景项目文件治理：目录判定、入口文件、参考材料、交付目录、创作素材/过程稿/成品等场景规则。 |
 | [`grill`](./skills/grill/SKILL.md) | 在开放式需求中逐层确认决策点和边界。 |
 | [`handoff`](./skills/handoff/SKILL.md) | 在切换 Agent 或主动交接时生成可继续执行的工作快照。 |
 
