@@ -106,6 +106,8 @@
 
 ### 仓内交付目录骨架
 
+交付目录（`delivery/`）在研发仓内的维护规则（镜像、发布命令、变更联动）维护在研发仓根入口，不在交付树内建局部入口；交付树内的 `AGENTS.md` 属于交付内容，由 [public-agents.md](./templates/public-agents.md) 底稿生成。
+
 ```md
 # <目录名>
 
