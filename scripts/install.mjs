@@ -31,7 +31,7 @@ const isWin = os.platform() === 'win32';
 // Claude Code sparse 只拉这几个目录（.claude-plugin 里同时含 marketplace.json + plugin.json）
 const CC_SPARSE = ['.claude-plugin', 'hooks', 'skills'];
 // post-clean 白名单：各家 cache 只保留这些，其余（仓库杂物 + 别家清单）一律删——比黑名单稳，仓库以后加新根文件也不漏
-const CC_KEEP = ['.claude-plugin', 'hooks', 'skills', 'AGENTS.md', '.in_use'];   // .in_use 是 Claude Code 装插件的内部标记；AGENTS.md 是公开仓局部治理入口
+const CC_KEEP = ['.claude-plugin', 'hooks', 'skills', '.in_use'];   // .in_use 是 Claude Code 装插件的内部标记
 
 const log = (m) => console.log(m);
 const sh = (cmd) => execSync(cmd, { stdio: 'pipe', encoding: 'utf8' });
