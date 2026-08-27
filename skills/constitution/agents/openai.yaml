@@ -1,0 +1,3 @@
+interface:
+  display_name: "全局规则总纲"
+  short_description: "Agent 全局规则，任何会话、任何任务开始前加载并遵守"

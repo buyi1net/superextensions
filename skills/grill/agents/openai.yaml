@@ -1,0 +1,3 @@
+interface:
+  display_name: "需求追问"
+  short_description: "把方案拆成决策树，分批追问到每个分支确认或排除"
