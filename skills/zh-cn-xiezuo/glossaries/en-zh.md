@@ -6,8 +6,8 @@
 
 | English | 中文 | 说明 |
 |---------|------|------|
-| AI Agent | AI 智能体 | |
-| Agentic | 智能体化的 | |
+| AI Agent | agent、AI 智能体 | Agent 项目和执行规则沿用项目惯例保留 `agent`；面向普通读者的科普文本可译“AI 智能体” |
+| Agentic | agent 驱动的、智能体化的 | 优先按具体语境说清谁在驱动；只有目标领域已有惯例时才用“智能体化的” |
 | Vibe Coding | 凭感觉编程 | |
 | the Bitter Lesson | 苦涩的教训 | Rich Sutton 的文章 |
 | Context Engineering | 上下文工程 | |
@@ -16,24 +16,25 @@
 | Hallucination | 幻觉 | AI 语境 |
 | Alignment | 对齐 | AI 安全语境 |
 | Guardrails | 护栏 | AI 安全语境 |
-| Grounding | 落地 | 依语境 |
+| Grounding | 依据外部事实、事实约束 | AI 语境指让输出受可靠来源约束，不译“落地”；其它领域按实际语境处理 |
 | Embedding | 嵌入 | |
 | Reasoning | 推理 | 模型能力语境 |
 | Chain of Thought | 思维链 | |
 | Tool Use | 工具调用 | |
 | Boilerplate | 样板代码 | |
 | Prompt Engineering | 提示工程 | |
+| leading word | 关键词 | 提示词中模型在预训练阶段已经理解、能唤起一整套行为的短词或短语；首现保留英文 |
 | Fine-tuning | 微调 | |
 | Inference | 推理 | AI 语境 |
 | Latent Space | 潜空间 | |
 | Retrieval-Augmented Generation (RAG) | 检索增强生成 | |
 | prompt injection | 提示注入 | |
 | context window | 上下文窗口 | |
-| progressive disclosure | 渐进披露 | 信息架构语境 |
+| progressive disclosure | 按需展开、渐进披露 | Agent 规则按条件加载时用“按需展开”；正式信息架构语境可用通行译法并在需要时解释 |
 | primary source | 一手来源 | |
 | marketplace | 插件市场 | 生态语境 |
 | frontmatter | frontmatter | 文件头部元数据，约定不译 |
-| prose（泛指行文） | 正文 | 不是"散文" |
+| prose | 文字、行文、正文 | 泛指写出来的内容时用“文字”或“行文”，指文档主体时用“正文”；通常不是“散文” |
 | bucket（目录分组） | 分组 | 不是"水桶" |
 | harness（运行环境） | 运行环境 | 不是"马具"，首现加英文 |
 
