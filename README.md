@@ -10,7 +10,7 @@ SuperExtensions 是一款面向 Claude Code、Codex、OpenCode、Pi、Hermes Age
 | [`management`](./skills/management/SKILL.md) | 全场景项目文件治理：目录判定、入口文件、参考材料、交付目录、创作素材/过程稿/成品等场景规则。 |
 | [`grill`](./skills/grill/SKILL.md) | 在开放式需求中逐层确认决策点和边界。 |
 | [`handoff`](./skills/handoff/SKILL.md) | 在切换 Agent 或主动交接时生成可继续执行的工作快照。 |
-| [`zh-cn-xiezuo`](./skills/zh-cn-xiezuo/SKILL.md) | 中文表达统一标准：翻译（双向）、写作去AI味、对话交流、代码 i18n，一条完整表达链路。 |
+| [`zh-cn-xiezuo2`](./skills/zh-cn-xiezuo2/SKILL.md) | 简体中文表达统一标准：翻译、写作、交流、代码注释与本地化按场景加载专门制度。 |
 
 ## 前置条件
 
