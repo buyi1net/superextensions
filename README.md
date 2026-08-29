@@ -1,6 +1,6 @@
 # SuperExtensions
 
-SuperExtensions 是一款面向 Claude Code、Codex、OpenCode、Pi、Hermes Agent 的治理规范，属于每个 Agent 必不可缺的一环，推荐所有人安装该插件包。
+SuperExtensions 是一款面向 Claude Code、Codex、OpenCode、Pi、OMP (Oh My Pi)、Hermes Agent 的治理规范，属于每个 Agent 必不可缺的一环，推荐所有人安装该插件包。
 
 ## 工具列表
 
@@ -110,6 +110,26 @@ pi remove git:github.com/buyi1net/superextensions
 ```
 
 安装或更新后重启 Pi，或在已打开的 Pi 中执行 `/reload`。`pi list` 应显示该包，`pi config` 中的扩展和 skill 应处于启用状态。
+
+## OMP (Oh My Pi)
+
+OMP 是 pi-coding-agent 的同源二次开发版，原生读取本仓 `package.json` 的 `pi` 清单与 `.pi/extensions/`，每次用户提交提示时注入 constitution，不需要 OMP 专属适配文件。
+
+```bash
+# 安装
+omp install https://github.com/buyi1net/superextensions
+
+# 验证
+omp plugin list
+
+# 更新（插件以 Git 依赖安装在 ~/.omp/plugins，不走 marketplace 升级命令）
+cd ~/.omp/plugins && bun update superextensions
+
+# 卸载
+omp plugin uninstall superextensions
+```
+
+安装或更新后重启 OMP。会话的 skill 列表应包含本仓 skill，系统提示末尾应出现 constitution 注入块。
 
 ## Hermes Agent
 

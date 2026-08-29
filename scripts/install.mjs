@@ -2,18 +2,20 @@
 /**
  * superextensions 跨 agent 一键安装器（跨平台：Windows / macOS / Linux）
  *
- * 把 superextensions plugin（规则总纲 constitution + 配套 skill）装到 Claude Code / Codex / OpenCode。
+ * 把 superextensions plugin（规则总纲 constitution + 配套 skill）装到 Claude Code / Codex / OpenCode / OMP。
  * Pi 不归这里管：Pi 有原生包机制，用 `pi install git:github.com/buyi1net/superextensions`（README「分家手动」）。
  * 各家的安装策略：
  *   - Claude Code：marketplace add --sparse，装时只拉自己的目录
  *   - Codex：plugin add 会二次完整 clone，不能 sparse（partial clone 缺 blob 会失败），
  *            必须保留原生完整缓存，不能在安装后删除仓库文件
  *   - OpenCode：先失效本插件的 Git 缓存，再调用原生 plugin 命令安装并注册
+ *   - OMP：pi 同源 fork，原生读 package.json 的 pi 清单；已装走 bun update（git 依赖不走
+ *          marketplace 升级），未装走 omp install
  *
  * 用法：
- *   node install.mjs                装三家
- *   node install.mjs --cc|--codex|--opencode   只装指定家（可组合）
- *   node install.mjs --uninstall    三家卸载（Pi 用 pi remove，不归这里）
+ *   node install.mjs                装四家
+ *   node install.mjs --cc|--codex|--opencode|--omp   只装指定家（可组合）
+ *   node install.mjs --uninstall    四家卸载（Pi 用 pi remove，不归这里）
  *   node install.mjs --codex --uninstall       只卸载 Codex（其它目标同理）
  */
 import { execSync } from 'node:child_process';
@@ -35,7 +37,7 @@ const CC_KEEP = ['.claude-plugin', 'hooks', 'skills', '.in_use'];   // .in_use �
 
 const log = (m) => console.log(m);
 const sh = (cmd) => execSync(cmd, { stdio: 'pipe', encoding: 'utf8' });
-const shLoud = (cmd) => { log('  $ ' + cmd); return execSync(cmd, { stdio: 'inherit' }); };
+const shLoud = (cmd, opts = {}) => { log('  $ ' + cmd); return execSync(cmd, { stdio: 'inherit', ...opts }); };
 const tryQuiet = (cmd) => { try { sh(cmd); return true; } catch { return false; } };
 const has = (bin) => { try { sh(isWin ? `where ${bin}` : `command -v ${bin}`); return true; } catch { return false; } };
 
@@ -151,6 +153,34 @@ function rmOpencodeCache() {
   return pkgs.join(', ');
 }
 
+// ---------- OMP (Oh My Pi) ----------
+// omp 是 pi 的同源 fork，原生读 package.json 的 pi 清单和 .pi/extensions，无需 omp 专属适配。
+// 插件以 bun git 依赖形式装在 ~/.omp/plugins：已装走 bun update 拉最新 commit（omp plugin
+// upgrade 只认 name@marketplace，管不到 git 依赖），未装走 omp install 首次安装。
+function installOmp() {
+  log('\n=== OMP (Oh My Pi) ===');
+  if (!has('omp')) { log('  跳过：未找到 omp CLI'); return; }
+  const ompPlugins = path.join(HOME, '.omp', 'plugins');
+  let installed = false;
+  const pkgPath = path.join(ompPlugins, 'package.json');
+  if (fs.existsSync(pkgPath)) {
+    try {
+      const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+      installed = Boolean(pkg.dependencies?.[PLUGIN]);
+    } catch {}
+  }
+  if (installed) {
+    shLoud(`bun update ${PLUGIN}`, { cwd: ompPlugins });
+  } else {
+    shLoud(`omp install ${GIT_URL}`);
+  }
+  const skillsDir = path.join(ompPlugins, 'node_modules', PLUGIN, 'skills');
+  if (!fs.existsSync(path.join(skillsDir, 'constitution', 'SKILL.md'))) {
+    throw new Error('OMP 插件目录不完整：没找到 skills/constitution/SKILL.md');
+  }
+  log('  ✓ OMP 已更新；omp 是 pi 同源 fork，.pi/extensions 原生注入 constitution，skills 由 pi 清单注册');
+}
+
 // ---------- 卸载 ----------
 function uninstallSelected(targets) {
   log('\n=== 卸载 ===');
@@ -195,15 +225,21 @@ function uninstallSelected(targets) {
     }
     log('  OpenCode 已从 opencode.json 移除');
   }
+  if (targets.omp && has('omp')) {
+    tryQuiet(`omp plugin uninstall ${PLUGIN}`);
+    rmDir(path.join(HOME, '.omp', 'plugins', 'node_modules', PLUGIN));   // uninstall 万一留残留，兜底删掉
+    log('  OMP 已卸');
+  }
 }
 
 // ---------- main ----------
 const args = process.argv.slice(2);
-const all = !args.some(a => ['--cc', '--codex', '--opencode'].includes(a));
+const all = !args.some(a => ['--cc', '--codex', '--opencode', '--omp'].includes(a));
 const targets = {
   cc: all || args.includes('--cc'),
   codex: all || args.includes('--codex'),
   opencode: all || args.includes('--opencode'),
+  omp: all || args.includes('--omp'),
 };
 if (args.includes('--uninstall')) {
   uninstallSelected(targets);
@@ -222,9 +258,10 @@ log(`superextensions 跨 agent 安装器  (平台: ${os.platform()})`);
 if (targets.cc) runInstaller('Claude Code', installCC);
 if (targets.codex) runInstaller('Codex', installCodex);
 if (targets.opencode) runInstaller('OpenCode', installOpencode);
+if (targets.omp) runInstaller('OMP', installOmp);
 if (failures.length) {
   log(`\n安装失败：${failures.join('、')}`);
   process.exitCode = 1;
 } else {
-  log('\n完成。Claude Code 使用精简 cache；Codex 保留原生完整 cache；OpenCode 使用原生 plugin 注册。');
+  log('\n完成。Claude Code 使用精简 cache；Codex 保留原生完整 cache；OpenCode 使用原生 plugin 注册；OMP 以 bun git 依赖维护。');
 }
