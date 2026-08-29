@@ -1,6 +1,6 @@
 ---
-name: zh-cn-xiezuo2
-description: 统一处理面向简体中文用户的翻译、写作、解释、代码注释、界面文案与对外表达，并按具体文本场景加载专门制度。
+name: zh-cn-express
+description: 简体中文翻译、写作、交流与本地化的统一表达标准候选
 ---
 
 # 简体中文表达
