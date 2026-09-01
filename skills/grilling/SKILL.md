@@ -1,5 +1,5 @@
 ---
-name: grill
+name: grilling
 description: 需求追问——把方案拆成决策树，分批追问到每个分支确认或排除，直到方案清晰。
 ---
 

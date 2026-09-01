@@ -1,3 +1,5 @@
 interface:
   display_name: "工作交接"
   short_description: "生成并保存当前会话的工程交接文件，供下一位 Agent 接手"
+policy:
+  allow_implicit_invocation: false

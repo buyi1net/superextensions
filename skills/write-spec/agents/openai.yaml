@@ -1,0 +1,5 @@
+interface:
+  display_name: "整理规范"
+  short_description: "把已经讨论确定的决策整理成可执行的规范文档"
+policy:
+  allow_implicit_invocation: false

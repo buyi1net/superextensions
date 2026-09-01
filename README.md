@@ -8,7 +8,7 @@ SuperExtensions 是一款面向 Claude Code、Codex、OpenCode、Pi、OMP (Oh My
 |---|---|
 | [`constitution`](./skills/constitution/SKILL.md) | 全局规则总纲，定义语言、沟通和工作纪律等基础约束。 |
 | [`management`](./skills/management/SKILL.md) | 全场景项目文件治理：目录判定、入口文件、参考材料、交付目录、创作素材/过程稿/成品等场景规则。 |
-| [`grill`](./skills/grill/SKILL.md) | 在开放式需求中逐层确认决策点和边界。 |
+| [`grilling`](./skills/grilling/SKILL.md) | 在开放式需求中逐层确认决策点和边界。 |
 | [`handoff`](./skills/handoff/SKILL.md) | 在切换 Agent 或主动交接时生成可继续执行的工作快照。 |
 | [`zh-cn-express`](./skills/zh-cn-express/SKILL.md) | 简体中文翻译、写作、交流与本地化的统一表达标准候选 |
 
@@ -154,7 +154,7 @@ hermes plugins update superextensions
 hermes plugins remove superextensions
 ```
 
-安装、更新、启用或禁用后，重启正在运行的 Hermes CLI、Gateway 或 Desktop 会话。插件 skill 不进入 Hermes 的扁平 skill 索引，需要通过 `skill_view("superextensions:grill")` 等 namespaced 名称加载。
+安装、更新、启用或禁用后，重启正在运行的 Hermes CLI、Gateway 或 Desktop 会话。插件 skill 不进入 Hermes 的扁平 skill 索引，需要通过 `skill_view("superextensions:grilling")` 等 namespaced 名称加载。
 
 Hermes v0.20.2 扫描完整仓库时，可能把 `.claude-plugin/plugin.json` 和 `.codex-plugin/plugin.json` 当作 portable manifest 探测并打印两条 schema 警告；只要 `hermes plugins show superextensions` 显示插件已启用，这两条警告不影响 `.hermes-plugin` 的加载。
 
