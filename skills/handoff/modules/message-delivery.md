@@ -2,6 +2,10 @@
 
 > 本模块只处理已经由主 skill 选择的消息路径，不重新判断交付方式，也不执行文件路径。
 
+## 保存中转文件
+
+ 读取[文件交付模块](./file-delivery.md)确认好文件应该保存在哪以及如何保存之后，执行保存前自查，然后再做环境判断。 
+
 ## 环境判断
 
 消息路径只支持 Herdr 和 tmux，暂不兼容 Windows Terminal 或其它终端标签页、分屏工具。
@@ -52,5 +56,3 @@
 7. Herdr 环境：在当前 workspace 的当前 tab 内开 pane 并启动目标 CLI，不新建 workspace 或 tab；命令语法以当前环境 `herdr --skill` 或 `herdr <组> --help` 为权威。
 8. tmux 环境：用 `tmux new-window -n handoff -c <工作目录>` 开新窗口，在其中启动目标 CLI。
 9. 启动或注入失败时如实报告失败原因；中转文件已写但未送达时保留它，并把路径告诉用户。
-
-执行时参数以目标 CLI 本机 `--help` 复核为准，不猜。
