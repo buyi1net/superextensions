@@ -4,12 +4,34 @@ SuperExtensions 是一款面向 Claude Code、Codex、OpenCode、Pi、OMP (Oh My
 
 ## 工具列表
 
+全局规则：
+
 | Skill | 用途 |
 |---|---|
 | [`constitution`](./skills/constitution/SKILL.md) | 全局规则总纲，定义语言、沟通和工作纪律等基础约束。 |
-| [`grilling`](./skills/grilling/SKILL.md) | 在开放式需求中逐层确认决策点和边界。 |
-| [`handoff`](./skills/handoff/SKILL.md) | 在切换 Agent 或主动交接时生成可继续执行的工作快照。 |
-| [`zh-cn-express`](./skills/zh-cn-express/SKILL.md) | 简体中文翻译、写作、交流与本地化的统一表达标准候选 |
+
+工程流（engineering）：
+
+| Skill | 用途 |
+|---|---|
+| [`grilling`](./skills/engineering/grilling/SKILL.md) | 在开放式需求中逐层确认决策点和边界。 |
+| [`code-review`](./skills/engineering/code-review/SKILL.md) | 按规范和规格两个维度评审代码变更。 |
+| [`codebase-design`](./skills/engineering/codebase-design/SKILL.md) | 设计深度模块的共享词汇，用于模块接口、深化机会和接缝布局。 |
+| [`diagnosing-bugs`](./skills/engineering/diagnosing-bugs/SKILL.md) | 疑难 bug 和性能回归的诊断循环。 |
+| [`domain-modeling`](./skills/engineering/domain-modeling/SKILL.md) | 构建和完善项目领域模型，维护 GLOSSARY 与 ADR。 |
+| [`implement`](./skills/engineering/implement/SKILL.md) | 按规格说明、工单或直接任务实现代码。 |
+| [`tdd`](./skills/engineering/tdd/SKILL.md) | 测试驱动开发循环与测试规范。 |
+| [`to-spec`](./skills/engineering/to-spec/SKILL.md) | 把当前对话的讨论与决策整理成规格说明并发布到项目跟踪。 |
+| [`to-tickets`](./skills/engineering/to-tickets/SKILL.md) | 把计划、规格说明或对话拆成追踪弹式工单。 |
+
+通用（productivity）：
+
+| Skill | 用途 |
+|---|---|
+| [`chinese-express`](./skills/productivity/chinese-express/SKILL.md) | 简体中文翻译、写作、交流与本地化的统一表达标准。 |
+| [`handoff`](./skills/productivity/handoff/SKILL.md) | 在切换 Agent 或主动交接时生成可继续执行的工作快照。 |
+| [`management`](./skills/productivity/management/SKILL.md) | 项目管理制度，涉及文件或目录操作前的强制入口。 |
+| [`writing-for-agents`](./skills/productivity/writing-for-agents/SKILL.md) | 给 AI 写文档的指南，创建或修改 skill、AGENTS.md 时使用。 |
 
 ## 前置条件
 

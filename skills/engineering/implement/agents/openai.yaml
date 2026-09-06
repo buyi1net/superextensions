@@ -1,0 +1,5 @@
+interface:
+  display_name: "代码实现"
+  short_description: "按规格说明、工单或用户直接交代的任务实现代码工作。"
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,5 @@
+interface:
+  display_name: "整理规范"
+  short_description: "把当前对话中已经讨论的内容和已经确定的决策，整理成一份规格说明(spec)，并保存到指定位置。"
+policy:
+  allow_implicit_invocation: false
