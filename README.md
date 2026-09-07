@@ -24,7 +24,7 @@ SuperExtensions 是一款面向 Claude Code、Codex、OpenCode、Pi、OMP (Oh My
 | [`to-spec`](./skills/engineering/to-spec/SKILL.md) | 把当前对话的讨论与决策整理成规格说明并发布到项目跟踪。 |
 | [`to-tickets`](./skills/engineering/to-tickets/SKILL.md) | 把计划、规格说明或对话拆成追踪弹式工单。 |
 
-通用（productivity）：
+表达（expression）：
 
 | Skill | 用途 |
 |---|---|
@@ -32,6 +32,11 @@ SuperExtensions 是一款面向 Claude Code、Codex、OpenCode、Pi、OMP (Oh My
 | [`express-check`](./skills/expression/express-check/SKILL.md) | 中文成稿交稿前的检测站：三视角检查加破折号、套话检测，查完即走。 |
 | [`express-translate`](./skills/expression/express-translate/SKILL.md) | 中英互译与软件汉化的语言标准：术语统一、力度保真、占位符保留。 |
 | [`express-writing`](./skills/expression/express-writing/SKILL.md) | 给人写文档的写前标准：范文对齐、无歧义、一段一事。 |
+
+通用（productivity）：
+
+| Skill | 用途 |
+|---|---|
 | [`handoff`](./skills/productivity/handoff/SKILL.md) | 在切换 Agent 或主动交接时生成可继续执行的工作快照。 |
 | [`management`](./skills/productivity/management/SKILL.md) | 项目管理制度，涉及文件或目录操作前的强制入口。 |
 | [`wait-what`](./skills/productivity/wait-what/SKILL.md) | 用户没听懂时，按受控中文技术写作标准换种方式重讲。 |
