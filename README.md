@@ -28,11 +28,13 @@ SuperExtensions 是一款面向 Claude Code、Codex、OpenCode、Pi、OMP (Oh My
 
 | Skill | 用途 |
 |---|---|
-| [`chinese-express`](./skills/productivity/chinese-express/SKILL.md) | 简体中文翻译、写作、交流与本地化的统一表达标准。 |
+| [`express-agents`](./skills/expression/express-agents/SKILL.md) | 给 AI 写文档的指南，创建或修改 skill、AGENTS.md 时使用。 |
+| [`express-check`](./skills/expression/express-check/SKILL.md) | 中文成稿交稿前的检测站：三视角检查加破折号、套话检测，查完即走。 |
+| [`express-translate`](./skills/expression/express-translate/SKILL.md) | 中英互译与软件汉化的语言标准：术语统一、力度保真、占位符保留。 |
+| [`express-writing`](./skills/expression/express-writing/SKILL.md) | 给人写文档的写前标准：范文对齐、无歧义、一段一事。 |
 | [`handoff`](./skills/productivity/handoff/SKILL.md) | 在切换 Agent 或主动交接时生成可继续执行的工作快照。 |
 | [`management`](./skills/productivity/management/SKILL.md) | 项目管理制度，涉及文件或目录操作前的强制入口。 |
 | [`wait-what`](./skills/productivity/wait-what/SKILL.md) | 用户没听懂时，按受控中文技术写作标准换种方式重讲。 |
-| [`writing-for-agents`](./skills/productivity/writing-for-agents/SKILL.md) | 给 AI 写文档的指南，创建或修改 skill、AGENTS.md 时使用。 |
 
 ## 前置条件
 
