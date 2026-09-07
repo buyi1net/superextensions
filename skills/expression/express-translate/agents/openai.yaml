@@ -1,3 +1,3 @@
 interface:
-  display_name: "简体中文表达标准"
-  short_description: "简体中文翻译、写作、交流与本地化的表达标准"
+  display_name: "中英互译"
+  short_description: "中英互译与软件汉化的语言标准"
