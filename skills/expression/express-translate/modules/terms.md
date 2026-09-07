@@ -30,6 +30,7 @@
 | retrieval-augmented generation | 检索增强生成                                    |
 | RLHF                           | 基于人类反馈的强化学习                          |
 | seam                           | 接缝                                            |
+| sub-agent                      | 子代理                                          |
 | tracer bullet                  | 追踪弹                                          |
 | vibe coding                    | 凭感觉编程                                      |
 
@@ -43,9 +44,11 @@
 | cutover                | 切换          |
 | dependency（任务依赖） | 依赖          |
 | deploy                 | 部署          |
+| editorial              | 编辑风        |
 | fallback               | 兜底          |
 | gotcha                 | 踩坑          |
 | issue                  | 问题单、issue |
+| load-bearing reason    | 硬理由        |
 | manual（操作语境）     | 手动（非「手工」） |
 | pitfall                | 踩坑          |
 | prefactor              | 预重构        |
@@ -54,6 +57,7 @@
 | reproduce              | 复现          |
 | staged rollout         | 灰度发布      |
 | sync                   | 同步（信息）  |
+| throat-clearing        | 铺垫          |
 | wizard                 | 向导          |
 
 ### 商业与策略

@@ -17,6 +17,7 @@ SuperExtensions 是一款面向 Claude Code、Codex、OpenCode、Pi、OMP (Oh My
 | [`grilling`](./skills/engineering/grilling/SKILL.md) | 在开放式需求中逐层确认决策点和边界。 |
 | [`code-review`](./skills/engineering/code-review/SKILL.md) | 按规范和规格两个维度评审代码变更。 |
 | [`codebase-design`](./skills/engineering/codebase-design/SKILL.md) | 设计深度模块的共享词汇，用于模块接口、深化机会和接缝布局。 |
+| [`deepen-modules`](./skills/engineering/deepen-modules/SKILL.md) | 扫描代码库找深化机会，用可视化报告摆出候选再深挖。 |
 | [`diagnosing-bugs`](./skills/engineering/diagnosing-bugs/SKILL.md) | 疑难 bug 和性能回归的诊断循环。 |
 | [`domain-modeling`](./skills/engineering/domain-modeling/SKILL.md) | 构建和完善项目领域模型，维护 GLOSSARY 与 ADR。 |
 | [`implement`](./skills/engineering/implement/SKILL.md) | 按规格说明、工单或直接任务实现代码。 |
@@ -30,7 +31,7 @@ SuperExtensions 是一款面向 Claude Code、Codex、OpenCode、Pi、OMP (Oh My
 | Skill | 用途 |
 |---|---|
 | [`express-agents`](./skills/expression/express-agents/SKILL.md) | 给 AI 写文档的指南，创建或修改 skill、AGENTS.md 时使用。 |
-| [`express-check`](./skills/expression/express-check/SKILL.md) | 中文成稿交稿前的检测站：三视角检查加破折号、套话检测，查完即走。 |
+| [`express-check`](./skills/expression/express-check/SKILL.md) | 中文成稿交稿前的检测站：自查改稿，新写和大改的稿件交稿前过子代理冷读终审。 |
 | [`express-translate`](./skills/expression/express-translate/SKILL.md) | 中英互译与软件汉化的语言标准：术语统一、力度保真、占位符保留。 |
 | [`express-writing`](./skills/expression/express-writing/SKILL.md) | 给人写文档的写前标准：范文对齐、无歧义、一段一事。 |
 
