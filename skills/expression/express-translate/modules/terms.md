@@ -20,7 +20,7 @@
 | hallucination                  | 幻觉                                            |
 | harness                        | 运行环境                                        |
 | inference                      | 推理                                            |
-| leading word                   | 关键词（首现保留英文）                          |
+| leading word                   | 关键词（首次出现时保留英文）                    |
 | latent space                   | 潜空间                                          |
 | prompt                         | 提示词                                          |
 | prompt engineering             | 提示工程                                        |
@@ -40,11 +40,13 @@
 | boilerplate            | 样板代码      |
 | bucket（目录分组）     | 分组          |
 | canary release         | 灰度发布      |
+| cutover                | 切换          |
 | dependency（任务依赖） | 依赖          |
 | deploy                 | 部署          |
 | fallback               | 兜底          |
 | gotcha                 | 踩坑          |
 | issue                  | 问题单、issue |
+| manual（操作语境）     | 手动（非「手工」） |
 | pitfall                | 踩坑          |
 | prefactor              | 预重构        |
 | regression             | 回归          |
@@ -52,6 +54,7 @@
 | reproduce              | 复现          |
 | staged rollout         | 灰度发布      |
 | sync                   | 同步（信息）  |
+| wizard                 | 向导          |
 
 ### 商业与策略
 

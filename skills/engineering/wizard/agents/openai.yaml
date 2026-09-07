@@ -1,0 +1,3 @@
+interface:
+  display_name: "向导"
+  short_description: "生成一个交互式 bash 向导，一步步带用户做完只有人类才能完成的操作流程"

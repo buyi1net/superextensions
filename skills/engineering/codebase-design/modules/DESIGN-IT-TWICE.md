@@ -1,6 +1,6 @@
 # Design It Twice
 
-当用户决定要对某个模块做深化，想看看这个接口还能怎么设计时，就用这个**并行子代理模式**。它的理论依据是 Ousterhout 的"Design It Twice"原则——**你脑子里冒出的第一个方案，大概率不是最优解。**
+当用户决定要对某个模块做深化，想看看这个接口还能怎么设计时，就用这个**并行子代理模式**。它的理论依据是 Ousterhout 的"Design It Twice"原则：**你脑子里冒出的第一个方案，大概率不是最优解。**
 
 用到主 `SKILL.md` 的术语表：模块(module)、接口(Interface)、接缝(seam)、适配器(Adapter)、杠杆效应(leverage)。
 
