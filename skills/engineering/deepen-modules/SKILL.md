@@ -35,7 +35,7 @@ description: 扫描代码库找深化机会，用可视化 HTML 报告摆出候�
 
 ### 2. 用 HTML 报告摆出候选
 
-报告是一个自包含的 HTML 文件，写进系统临时目录，仓库里一个字节都不留。临时目录看 `$TMPDIR` 环境变量，没设就用 `/tmp`（Windows 是 `%TEMP%`）；文件名带时间戳（`architecture-review-<timestamp>.html`），每次运行各写各的。写完替用户打开（Linux 用 `xdg-open <path>`，macOS 用 `open <path>`，Windows 用 `start <path>`），绝对路径也告诉用户。
+报告是一个自包含的 HTML 文件，写进项目的临时目录（`temp/`，内容可随时整体删除），不碰产线代码。文件名带时间戳（`architecture-review-<timestamp>.html`），每次运行各写各的。写完替用户打开（Linux 用 `xdg-open <path>`，macOS 用 `open <path>`，Windows 用 `start <path>`），绝对路径也告诉用户。
 
 布局和样式用 **Tailwind（CDN 引入）**，图用 **Mermaid（CDN 引入）**，但别把宝全押在 Mermaid 上：关系是图状的（调用图、依赖、时序）就用 Mermaid；要编辑风的图（体量图、横截面、坍缩动画），就手写 div/SVG。每个候选配一张**前后对比图**，视觉优先。
 

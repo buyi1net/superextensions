@@ -53,6 +53,6 @@
 | claude | 会话记录（`~/.claude/projects/` 下当前项目目录中、文件名为 `CLAUDE_CODE_SESSION_ID` 的 `.jsonl`）里 assistant 消息的 `model` 字段；读不到时用 `~/.claude/settings.json` 的 `model`。思考等级没有稳定落盘来源，读不到就按上一条降级 |
 
 6. 启动命令的首条消息固定为一条短指令：`读取 <中转文件绝对路径>，按文件中的接手确认流程开始交接`。交接正文全在中转文件里，不塞进命令行。
-7. Herdr 环境：在当前 workspace 的当前 tab 内开 pane 并启动目标 CLI，不新建 workspace 或 tab；命令语法以当前环境 `herdr --skill` 或 `herdr <组> --help` 为权威。
+7. Herdr 环境：布局纪律按 constitution《Herdr 协作》执行；命令语法以当前环境 `herdr --skill` 或 `herdr <组> --help` 为权威。
 8. tmux 环境：用 `tmux new-window -n handoff -c <工作目录>` 开新窗口，在其中启动目标 CLI。
 9. 启动或注入失败时如实报告失败原因；中转文件已写但未送达时保留它，并把路径告诉用户。

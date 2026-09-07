@@ -1,6 +1,6 @@
 # HTML 报告格式
 
-架构审查的报告是一个自包含的 HTML 文件，放在系统临时目录里。Tailwind 和 Mermaid 都走 CDN。图状关系用 Mermaid 画最稳；要编辑风的图（体量图、横截面）就手工搭 div 和内联 SVG。两种混着用，别什么都靠 Mermaid，会显得千篇一律。
+架构审查的报告是一个自包含的 HTML 文件，放在项目的临时目录里。Tailwind 和 Mermaid 都走 CDN。图状关系用 Mermaid 画最稳；要编辑风的图（体量图、横截面）就手工搭 div 和内联 SVG。两种混着用，别什么都靠 Mermaid，会显得千篇一律。
 
 ## 脚手架
 
