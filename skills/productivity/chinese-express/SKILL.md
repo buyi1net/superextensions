@@ -1,6 +1,7 @@
 ---
 name: chinese-express
 description: 简体中文表达标准：翻译、写作、对话、软件汉化。默认走日常对话风格，自然优先。
+disable-model-invocation: true
 ---
 
 > **核心原则：无歧义高于一切。** 拆短句、删虚词、压缩表达与它冲突时让路。读者会停下来猜断句或猜指代，就恢复被删的成分。

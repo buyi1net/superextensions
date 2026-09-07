@@ -247,6 +247,10 @@ description: Agent全局规则总纲，任何会话、任何任务开始前都�
 
 触发条件：当涉及到 `Agent`、`LLM` 、`skill`、`AGENTS.md`、`CLAUDE.md`这类工作时，用 skill 工具加载 `writing-for-agents`，它是总指导思想。
 
+### 重新解释
+
+触发条件：当用户表示没听懂的时候，用 skill 工具加载 `wait-what`。
+
 ### 工作交接
 
 触发条件：用户明确要求交接当前工作或切换接手的 Agent 时，用skill工具加载 `handoff`。
