@@ -1,5 +1,3 @@
 interface:
   display_name: "代码实现"
-  short_description: "按规格说明、工单或用户直接交代的任务实现代码工作。"
-policy:
-  allow_implicit_invocation: false
+  short_description: "编码工作总指导思想,只要涉及到写代码,哪怕是最简单的脚本都必须加载并全程遵守。"

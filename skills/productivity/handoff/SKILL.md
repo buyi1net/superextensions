@@ -1,7 +1,6 @@
 ---
 name: handoff
 description: 工作交接-生成并保存当前会话的核心上下文内容,方便下一个Agent可以快速了解工作内容。
-disable-model-invocation: true
 ---
 
 # 工作交接
