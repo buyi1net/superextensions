@@ -14,7 +14,7 @@ description: 对 Windows VM 做远程 GUI 验证时使用，覆盖连接选路�
 3. 只有 5985 可用、准备走 WinRM：先在本机查 `Get-Service WinRM` 和 `Get-PSDrive WSMan`。服务未运行或 `WSMan:` 盘符不存在，直接放弃这条路，别靠改注册表/GPO 连续试错。健康检查通过也不等于认证已配好；裸 IP 连接不能因为远端在域内就省略 TrustedHosts 等认证条件。
 4. 都不通：停下找用户，交代已验证的通道和缺口。
 
-跨 shell、凭据和工具箱纪律先读 [命令行基本功](../implement/modules/command-shell.md)。连接前从用户或 VM 控制台确认主机指纹；控制台可用 `ssh-keygen -lf C:\ProgramData\ssh\ssh_host_ed25519_key.pub` 核对对应密钥。密码文件由用户按凭据纪律提供，明确存放位置、访问权限和用完清理方式；不把对话中的密码复制进文件。
+跨 shell、凭据和工具箱纪律先读 [命令行基本功](../../constitution/modules/command-shell.md)。连接前从用户或 VM 控制台确认主机指纹；控制台可用 `ssh-keygen -lf C:\ProgramData\ssh\ssh_host_ed25519_key.pub` 核对对应密钥。密码文件由用户按凭据纪律提供，明确存放位置、访问权限和用完清理方式；不把对话中的密码复制进文件。
 
 本机控制器是 [scripts/vm.py](./scripts/vm.py)。必填 `--host`、`--user`、`--password-file`、`--hostkey`；当前只支持密码文件认证，没有密钥参数。`--transport auto|plink|paramiko` 默认 `auto`，在 `--putty-dir`（默认 `D:\MyProgram\AiBin\putty`）同时找到 plink.exe 和 pscp.exe 就选 putty，否则尝试 paramiko。putty 分支固定使用 `-batch`、`-hostkey`、`-pwfile`；先确认现有版本支持这些参数，旧版不支持时找用户补齐工具。
 

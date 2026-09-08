@@ -280,6 +280,10 @@ description: Agent全局规则总纲，任何会话、任何任务开始前都�
 
 触发条件：准备写入任何记忆（判断信息值得保存、写记忆文件、调用记忆服务写入）时，先读[《记忆系统》](./modules/memory.md)再动手。
 
+### Windows
+
+触发条件：所有涉及到 `git-bash`、`cmd`、`PowerShell`、`SSH`、`plink` 这类操作时，先读[《命令行基本功》](./modules/command-shell.md)再动手。
+
 ### Git 操作
 
 触发条件:任务涉及任何 git 写操作(提交、暂存、stash、合并、分支切换、回退等)时,先读[《Git 管理》](./modules/git.md) 再动手。

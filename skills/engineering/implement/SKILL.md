@@ -39,15 +39,11 @@ description: 编码工作总指导思想,只要涉及到写代码,哪怕是最�
 
 **文件的编码和行尾由解析它的运行时决定，不由写文件工具的默认值决定。** 写文件前先确认：这个文件会被谁、按什么代码页和行尾约定解析。
 
-1. 新建源文件默认 UTF-8；修改已有文件时跟随原编码，包括 BOM 的有无和行尾风格，不擅自转换，避免整文件 diff 或破坏已有非 ASCII 字符。
-2. 工具链只支持 ASCII、Latin-1、Shift-JIS 等编码时，注释退回工具链支持的语言，不为中文注释引入编译或构建故障。
-3. MSVC 或 Visual Studio 编译 C/C++ 时，不带 BOM 的 UTF-8 源文件可能按系统代码页解析中文并触发 C4819 或乱码。使用 UTF-8 BOM，或给编译器添加 `/utf-8`。
-4. `.bat`/`.cmd` 由 cmd.exe 按系统 ANSI 代码页解析：中文直接按该代码页写（中文系统即 GBK），或用 UTF-8 无 BOM 并加 `chcp 65001`；带 BOM 会被并入首行命令导致报错。行尾必须 CRLF，LF 会让 `goto` 跨块定位标签失败。
-5. `.ps1` 供 Windows PowerShell 5.1 使用时必须 UTF-8 带 BOM，无 BOM 会按 ANSI 误读中文；PowerShell 7 起默认 UTF-8，无此问题。与 `.bat` 的 BOM 答案相反，不要混淆。
+1. 新建源文件默认 `UTF-8`；修改已有文件时跟随原编码，包括 `BOM` 的有无和行尾风格，不擅自转换，避免整文件 diff 或破坏已有非 ASCII 字符。
+2. 工具链只支持 `ASCII`、`Latin-1`、`Shift-JIS` 等编码时，注释退回工具链支持的语言，不为中文注释引入编译或构建故障。
+3. `MSVC` 或 Visual Studio 编译 C/C++ 时，不带 `BOM` 的 `UTF-8` 源文件可能按系统代码页解析中文并触发 `C4819` 或乱码。使用 `UTF-8 BOM`，或给编译器添加 `/utf-8`。
 
-### 命令行基本功
-
-Windows平台执行任何命令或者用 SSH 远程操作时，需要先读 [命令行基本功](./modules/command-shell.md)。
+Windows shell 脚本（`.bat`/`.cmd`/`.ps1`）的编码与行尾规则属于命令行基本功，见 [命令行基本功](../../constitution/modules/command-shell.md)；源码文件仍按本节原则处理。
 
 ### 代码注释
 
