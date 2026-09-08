@@ -25,7 +25,6 @@ SuperExtensions 是一款面向 Claude Code、Codex、OpenCode、Pi、OMP (Oh My
 | [`tdd`](./skills/engineering/tdd/SKILL.md) | 测试驱动开发循环与测试规范。 |
 | [`to-spec`](./skills/engineering/to-spec/SKILL.md) | 把当前对话的讨论与决策整理成规格说明并发布到项目跟踪。 |
 | [`to-tickets`](./skills/engineering/to-tickets/SKILL.md) | 把计划、规格说明或对话拆成追踪弹式工单。 |
-| [`vm-gui-verify`](./skills/engineering/vm-gui-verify/SKILL.md) | 远程验证 Windows VM 的真实桌面，覆盖连接、截图、点击、键入与环境重建。 |
 | [`wizard`](./skills/engineering/wizard/SKILL.md) | 生成 bash 向导脚本，一步步带用户做完只有人类才能完成的操作流程。 |
 
 表达（expression）：
