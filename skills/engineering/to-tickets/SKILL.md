@@ -1,7 +1,6 @@
 ---
 name: to-tickets
 description: 把计划、规格说明或当前对话拆成一组追踪弹式的工单。
-disable-model-invocation: true
 ---
 
 把计划、**规格说明（spec）**或当前对话拆成一组**工单（Tickets）**，每个工单都是一次**垂直切片（vertical slice）**（也叫“追踪弹”），并且标明它**依赖**哪些其他工单。
