@@ -45,6 +45,10 @@ description: 编码工作总指导思想,只要涉及到写代码,哪怕是最�
 4. `.bat`/`.cmd` 由 cmd.exe 按系统 ANSI 代码页解析：中文直接按该代码页写（中文系统即 GBK），或用 UTF-8 无 BOM 并加 `chcp 65001`；带 BOM 会被并入首行命令导致报错。行尾必须 CRLF，LF 会让 `goto` 跨块定位标签失败。
 5. `.ps1` 供 Windows PowerShell 5.1 使用时必须 UTF-8 带 BOM，无 BOM 会按 ANSI 误读中文；PowerShell 7 起默认 UTF-8，无此问题。与 `.bat` 的 BOM 答案相反，不要混淆。
 
+### 命令行基本功
+
+Windows平台执行任何命令或者用 SSH 远程操作时，需要先读 [命令行基本功](./modules/command-shell.md)。
+
 ### 代码注释
 
 **注释默认使用简体中文，只写代码本身读不出的信息，复述代码的注释一律不写。** 
