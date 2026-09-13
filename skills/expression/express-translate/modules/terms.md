@@ -1,26 +1,26 @@
 # 英中术语表
 
-> express-translate（原 chinese-express）的术语表。以下术语按稳定译法翻译，不轮换同义词；表中没有的术语，按语境定含义。
+> express-translate(原 chinese-express)的术语表.以下术语按稳定译法翻译,不轮换同义词;表中没有的术语,按语境定含义.
 
 ### AI与技术
 
 | English                        | 中文                                            |
 | ------------------------------ | ----------------------------------------------- |
-| AI Agent                       | Agent（面向技术文档）；AI智能体（面向科普文本） |
+| AI Agent                       | Agent(面向技术文档);AI智能体(面向科普文本) |
 | Agentic                        | Agent驱动的                                     |
-| alignment（AI安全语境）        | 对齐                                            |
+| alignment(AI安全语境)        | 对齐                                            |
 | blast radius                   | 爆炸半径                                        |
 | chain of thought               | 思维链                                          |
 | context window                 | 上下文窗口                                      |
 | embed                          | 嵌入                                            |
 | expand-contract                | 先扩展后收缩                                    |
 | fine-tuning                    | 微调                                            |
-| frontmatter                    | frontmatter（不译）                             |
+| frontmatter                    | frontmatter(不译)                             |
 | guardrails                     | 护栏                                            |
 | hallucination                  | 幻觉                                            |
 | harness                        | 运行环境                                        |
 | inference                      | 推理                                            |
-| leading word                   | 关键词（首次出现时保留英文）                    |
+| leading word                   | 关键词(首次出现时保留英文)                    |
 | latent space                   | 潜空间                                          |
 | prompt                         | 提示词                                          |
 | prompt engineering             | 提示工程                                        |
@@ -39,24 +39,24 @@
 | English                | 中文          |
 | ---------------------- | ------------- |
 | boilerplate            | 样板代码      |
-| bucket（目录分组）     | 分组          |
+| bucket(目录分组)     | 分组          |
 | canary release         | 灰度发布      |
 | cutover                | 切换          |
-| dependency（任务依赖） | 依赖          |
+| dependency(任务依赖) | 依赖          |
 | deploy                 | 部署          |
 | editorial              | 编辑风        |
 | fallback               | 兜底          |
 | gotcha                 | 踩坑          |
-| issue                  | 问题单、issue |
+| issue                  | 问题单,issue |
 | load-bearing reason    | 硬理由        |
-| manual（操作语境）     | 手动（非「手工」） |
+| manual(操作语境)     | 手动(非「手工」) |
 | pitfall                | 踩坑          |
 | prefactor              | 预重构        |
 | regression             | 回归          |
 | release                | 发布          |
 | reproduce              | 复现          |
 | staged rollout         | 灰度发布      |
-| sync                   | 同步（信息）  |
+| sync                   | 同步(信息)  |
 | throat-clearing        | 铺垫          |
 | wizard                 | 向导          |
 
