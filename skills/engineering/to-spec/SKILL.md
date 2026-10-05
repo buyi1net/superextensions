@@ -14,7 +14,7 @@ disable-model-invocation: true
 
 ### 第一步:探索代码
 
-如果还没探索过代码库,先探索一遍,了解当前状态.整份规格说明里都要使用项目的领域术语表(`docs/GLOSSARY.md`;多领域项目先看 `docs/GLOSSARY-INDEX.md`),并遵守所涉及区域的 ADR.
+如果还没探索过代码库,先探索一遍,了解当前状态.整份规格说明里都要使用项目的领域术语表(根目录 `GLOSSARY.md`;多领域项目先看 `GLOSSARY-MAP.md`),并遵守所涉及区域的 ADR.
 
 ### 第二步:确认接缝
 

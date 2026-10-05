@@ -7,24 +7,26 @@ description: 构建和完善项目的领域模型.适用于讨论代码库术语
 
 ## 文件结构
 
-默认整个项目只维护一个 `GLOSSARY.md`.即使项目包含多个插件,客户端或模块,只要它们使用同一套领域概念,就不要拆分术语表.
+默认整个项目只维护一个 `GLOSSARY.md`,放项目根目录.即使项目包含多个插件,客户端或模块,只要它们使用同一套领域概念,就不要拆分术语表.
+
+`GLOSSARY.md` 固定放项目根目录,不埋进 `docs/`:一埋进子目录,部分模型就不主动去读,术语每次都得从头解释一遍.
 
 ```text
 /
+├── GLOSSARY.md
 ├── docs/
-│   ├── GLOSSARY.md
 │   └── adr/
 │       ├── 0001-<决策名称>.md
 │       └── 0002-<决策名称>.md
 └── src/
 ```
 
-如果项目包含多个相互独立的领域,在项目的 `docs/` 目录中使用 `GLOSSARY-INDEX.md`,分别指向各领域自己的 `GLOSSARY.md`:
+如果项目包含多个相互独立的领域,在项目根目录放一个 `GLOSSARY-MAP.md`,分别指向各领域自己的 `GLOSSARY.md`:
 
 ```text
 /
+├── GLOSSARY-MAP.md
 ├── docs/
-│   ├── GLOSSARY-INDEX.md
 │   └── adr/                   ← 系统级项目决策
 └── src/
     ├── <领域一>/
@@ -69,7 +71,7 @@ description: 构建和完善项目的领域模型.适用于讨论代码库术语
 
 **5. 即时更新**
 
-术语敲定后**立刻**写进 `GLOSSARY.md`,别攒.边发生边记.格式见 [glossary.md](./modules/glossary.md).`GLOSSARY.md` **不许掺任何实现细节**.它不是规格书,不是草稿纸,也不是实现决策.就是个词汇表,没别的.
+术语敲定后**立刻**写进 `GLOSSARY.md`,别攒.边发生边记.格式见 [GLOSSARY-FORMAT.md](./modules/GLOSSARY-FORMAT.md).`GLOSSARY.md` **不许掺任何实现细节**.它不是规格书,不是草稿纸,也不是实现决策.就是个词汇表,没别的.
 
 **6. 谨慎记录 ADR**
 
@@ -79,4 +81,4 @@ description: 构建和完善项目的领域模型.适用于讨论代码库术语
 2. **脱离上下文则令人费解**:未来有人看到代码会纳闷"当时是怎么想的?"
 3. **经过真正的权衡**:存在其他可行方案,基于具体理由选择了当前方案
 
-三条中但凡有一条不满足,就不写 ADR.格式见 [adr.md](./modules/adr.md).
+三条中但凡有一条不满足,就不写 ADR.格式见 [ADR-FORMAT.md](./modules/ADR-FORMAT.md).

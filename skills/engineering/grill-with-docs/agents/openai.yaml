@@ -1,0 +1,5 @@
+interface:
+  display_name: "对齐需求并产出文档"
+  short_description: "通过一场刨根问底的访谈来打磨方案或设计,并在此过程中同步产出文档(ADR 和术语表)."
+policy:
+  allow_implicit_invocation: false

@@ -14,7 +14,7 @@ SuperExtensions 是一款面向 Claude Code、Codex、OpenCode、Pi、OMP (Oh My
 
 | Skill | 用途 |
 |---|---|
-| [`grilling`](./skills/engineering/grilling/SKILL.md) | 在开放式需求中逐层确认决策点和边界。 |
+| [`grill-with-docs`](./skills/engineering/grill-with-docs/SKILL.md) | 刨根问底打磨方案，访谈过程同步产出 ADR 与术语表。 |
 | [`code-review`](./skills/engineering/code-review/SKILL.md) | 按规范和规格两个维度评审代码变更。 |
 | [`codebase-design`](./skills/engineering/codebase-design/SKILL.md) | 设计深度模块的共享词汇，用于模块接口、深化机会和接缝布局。 |
 | [`deepen-modules`](./skills/engineering/deepen-modules/SKILL.md) | 扫描代码库找深化机会，用可视化报告摆出候选再深挖。 |
@@ -40,6 +40,7 @@ SuperExtensions 是一款面向 Claude Code、Codex、OpenCode、Pi、OMP (Oh My
 
 | Skill | 用途 |
 |---|---|
+| [`grilling`](./skills/productivity/grilling/SKILL.md) | 在开放式需求中逐层追问决策点和边界，打磨方案。 |
 | [`handoff`](./skills/productivity/handoff/SKILL.md) | 在切换 Agent 或主动交接时生成可继续执行的工作快照。 |
 | [`management`](./skills/productivity/management/SKILL.md) | 项目管理制度，涉及文件或目录操作前的强制入口。 |
 | [`teach`](./skills/productivity/teach/SKILL.md) | 多会话有状态的私人教学系统，任务、课程、学习记录、参考文档一整套。 |

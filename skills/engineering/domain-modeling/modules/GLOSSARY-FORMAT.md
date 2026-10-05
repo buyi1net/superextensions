@@ -31,16 +31,16 @@ _避免使用_:Client,buyer,account
 
 ## 一个 GLOSSARY.md 还是多个?
 
-**大多数项目只需要一份：** 直接在项目的 `docs/` 目录放一个 `GLOSSARY.md` 就够了.
+**大多数项目只需要一份：** 直接在项目根目录放一个 `GLOSSARY.md` 就够了.
 
-**但有些项目会拆成多份：** 比如有独立的子模块或微服务,各自维护自己的术语表.这时在项目的 `docs/` 目录放一个 `GLOSSARY-INDEX.md` 作为索引:
+**但有些项目会拆成多份：** 比如有独立的子模块或微服务,各自维护自己的术语表.这时在项目根目录放一个 `GLOSSARY-MAP.md` 作为索引:
 
 ```md
 ## 领域
 
-- [订单](../src/ordering/GLOSSARY.md):接收并跟踪客户订单
-- [计费](../src/billing/GLOSSARY.md):生成发票并处理付款
-- [履约](../src/fulfillment/GLOSSARY.md):管理仓库拣货和发货
+- [订单](src/ordering/GLOSSARY.md):接收并跟踪客户订单
+- [计费](src/billing/GLOSSARY.md):生成发票并处理付款
+- [履约](src/fulfillment/GLOSSARY.md):管理仓库拣货和发货
 
 ## 领域关系
 
@@ -51,7 +51,7 @@ _避免使用_:Client,buyer,account
 
 这个 skill 会自动判断:
 
-- `docs/` 下有 `GLOSSARY-INDEX.md`,就按索引导航.
+- 根目录有 `GLOSSARY-MAP.md`,就按索引导航.
 - 只有 `GLOSSARY.md`,就是单份术语表.
 - 都没有,等第一个术语敲定时再创建,不预建空文件.
 
