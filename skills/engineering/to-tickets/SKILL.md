@@ -96,4 +96,4 @@ description: 把计划,规格说明或当前对话拆成一组追踪弹式的工
 
 ### 第七步:指令审查
 
-用 Skill 工具记载 `express-agents` 做指令审查。
+用 Skill 工具加载 `express-agents` 做指令审查。
