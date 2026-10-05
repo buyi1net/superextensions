@@ -4,4 +4,4 @@ description: 通过一场刨根问底的访谈来打磨方案或设计,并在此
 disable-model-invocation: true
 ---
 
-用 SKill 工具分别调用 `grilling` 和 `domain-modeling`。
+用 Skill 工具分别调用 `grilling` 和 `domain-modeling`。
