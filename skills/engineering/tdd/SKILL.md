@@ -21,7 +21,7 @@ description: 测试驱动开发,适用于:用户想按测试优先的方式开�
 
 要问自己:"公开接口是什么?我们要在哪些接缝上测?"
 
-如果接口本身的形态还没定时(比如模块多深,接缝放哪,接口该暴露什么),请用 skill 工具加载 **“codebase-design”**,用那套术语来对齐.那是模块(Module),接口(Interface),实现(Implementation),深度(Depth),接缝(Seam),适配器(Adapter),杠杆效应(Leverage)和局部性(Locality)等术语的共同来源.它是拿来查的参考手册,不是拿来跑一轮的流程.
+如果接口本身的形态还没定时(比如模块多深,接缝放哪,接口该暴露什么),请用 Skill 工具加载 “codebase-design”,用那套术语来对齐.那是模块(Module),接口(Interface),实现(Implementation),深度(Depth),接缝(Seam),适配器(Adapter),杠杆效应(Leverage)和局部性(Locality)等术语的共同来源.它是拿来查的参考手册,不是拿来跑一轮的流程.
 
 ## 反模式
 

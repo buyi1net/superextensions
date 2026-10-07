@@ -1,3 +1,3 @@
 interface:
   display_name: "代码库设计"
-  short_description: "设计取舍与源码组织原则，涵盖简洁设计、实现复用、深度模块与可测试性"
+  short_description: "设计取舍与源码组织原则,涵盖简洁设计,实现复用,深度模块与可测试性"
