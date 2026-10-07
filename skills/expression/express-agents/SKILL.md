@@ -5,7 +5,7 @@ description: 给 AI 写文档的指导思想
 
 给 AI 读的文档,写法都相通——skill,`AGENTS.md`,`CLAUDE.md`,指针指向的那些,都一样.AI 每次跑的是同一套流程,不是照搬固定输出.结构对了,换哪种载体,行为都可预测.
 
-写 skill 另有一套机制上的事:frontmatter 怎么填,调用方式怎么选,路由 skill 怎么用.这些单独放 [`SKILL-MECHANICS.md`](./modules/skill-mechanics.md/) 里讲.
+写 skill 另有一套机制上的事:frontmatter 怎么填,调用方式怎么选,路由 skill 怎么用.这些单独放 [`SKILL-MECHANICS.md`](./modules/SKILL-MECHANICS.md) 里讲.
 
 ## 语感
 
@@ -98,7 +98,7 @@ description: 给 AI 写文档的指导思想
 
 把一个文档拆成两个,本质是在「上下文开销」和「认知开销」之间做取舍.**只有在拆分带来的收益大于成本时,才值得动手.**
 
-常见的拆法有两种.一种是**按流程拆**:后面的步骤会诱使 Agent 急着做完当前这一步,就把后面的步骤拆出去藏起来.看不见后面的步骤,Agent 才会老老实实把手头的活干透.反过来也要小心——把拆开的流程合回去,每一步都能看到后面的步骤,就会诱导 Agent 提前收工.另一种是**按调用方式拆**,skill 专用,详见 [`SKILL-MECHANICS.md`](./modules/skill-mechanics.md/).
+常见的拆法有两种.一种是**按流程拆**:后面的步骤会诱使 Agent 急着做完当前这一步,就把后面的步骤拆出去藏起来.看不见后面的步骤,Agent 才会老老实实把手头的活干透.反过来也要小心——把拆开的流程合回去,每一步都能看到后面的步骤,就会诱导 Agent 提前收工.另一种是**按调用方式拆**,skill 专用,详见 [`SKILL-MECHANICS.md`](./modules/SKILL-MECHANICS.md).
 
 ## 引导词
 

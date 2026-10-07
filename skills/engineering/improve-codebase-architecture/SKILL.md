@@ -1,5 +1,5 @@
 ---
-name: deepen-modules
+name: improve-codebase-architecture
 description: 扫描代码库找深化机会,用可视化 HTML 报告摆出候选,挑中哪个就深挖哪个.
 ---
 
