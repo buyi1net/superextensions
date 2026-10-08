@@ -1,0 +1,728 @@
+<!doctype html>
+<!-- 代码库体检报告模板：替换 report-data 中的示例数据后，作为单文件报告交付。 -->
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>代码库体检报告</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f5f7f5; --white: #fff; --ink: #233542; --muted: #617169;
+      --line: #dbe3dd; --accent: #1b6d54; --soft: #eaf4ee; --amber: #8a5b20;
+      --header-height: 60px;
+    }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    html, body { margin: 0; height: 100%; }
+    body {
+      background: var(--paper); color: var(--ink);
+      font: 16px/1.7 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    button, input, select { font: inherit; color: inherit; }
+    button, select { cursor: pointer; }
+    a { color: var(--accent); text-underline-offset: 3px; }
+    button, a, input, select { -webkit-tap-highlight-color: transparent; }
+    :focus-visible { outline: 3px solid #27815f; outline-offset: 3px; }
+    h1, h2, h3, p, figure, dl, dd { margin: 0; }
+    h1, h2, h3 { font-weight: 650; line-height: 1.4; }
+    button { border: 0; }
+    .report { min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; overflow-wrap: anywhere; }
+    .page-header { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: 16px; flex-shrink: 0; min-width: 0; height: var(--header-height); padding: 10px 24px; border-bottom: 1px solid var(--line); background: #f8faf7; }
+    .page-header h1 { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 18px; letter-spacing: -.025em; }
+    .candidate-link, .detail h2 { min-width: 0; }
+    .date { margin-left: auto; padding-left: 8px; color: var(--muted); font-size: 12px; white-space: nowrap; }
+    .header-totals { flex-shrink: 0; padding: 3px 10px; border-radius: 20px; background: #edf2ed; color: var(--muted); font-size: 12px; white-space: nowrap; }
+    .header-totals strong { color: var(--ink); font-weight: 600; }
+    .report-info { position: relative; flex-shrink: 0; }
+    .report-info summary { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--soft); color: var(--accent); cursor: pointer; list-style: none; font: 600 17px/1 Georgia, serif; }
+    .report-info summary::-webkit-details-marker { display: none; }
+    .report-info[open] summary { background: #d9ebdf; }
+    .info-panel { position: absolute; z-index: 6; right: 0; top: calc(100% + 10px); width: min(540px, calc(100vw - 32px)); max-height: calc(100vh - var(--header-height) - 16px); max-height: calc(100dvh - var(--header-height) - 16px); overflow-y: auto; overscroll-behavior-y: contain; padding: 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--white); box-shadow: 0 8px 30px #23354214; font-size: 14px; }
+    .info-project { font-weight: 600; }
+    .scope { margin-top: 8px; color: var(--muted); }
+    .note { margin-top: 10px; color: var(--amber); }
+    .context-date { display: none; }
+    .distribution { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 12px; font-size: 13px; color: var(--muted); }
+    .distribution span { display: inline-flex; align-items: center; gap: 5px; }
+    .dist-desc { font-size: 11px; opacity: 0.85; }
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: #798a91; }
+    .dot.high { background: var(--accent); }
+    .dot.medium { background: #b38642; }
+    .dot.low { background: #798a91; }
+    .workspace { flex: 1; display: grid; grid-template-columns: 322px minmax(0, 1fr); background: var(--white); }
+    .directory { position: sticky; top: var(--header-height); align-self: start; height: calc(100vh - var(--header-height)); height: calc(100dvh - var(--header-height)); min-height: 0; display: flex; flex-direction: column; border-right: 1px solid var(--line); background: #fbfcfa; }
+    .filters { flex-shrink: 0; padding: 19px 18px 13px; border-bottom: 1px solid var(--line); }
+    .directory-title { font-size: 17px; margin-bottom: 12px; }
+    input, select { width: 100%; height: 44px; border: 1px solid #cfd9d2; border-radius: 14px; background: var(--white); font-size: 14px; }
+    input { padding: 8px 14px; }
+    input::placeholder { color: #819088; }
+    .filter-fields { display: grid; gap: 10px; }
+    .filter-fields label { display: grid; gap: 4px; color: var(--muted); font-size: 12px; }
+    .select-control { position: relative; display: block; }
+    .select-control::before { content: ""; position: absolute; right: 10px; top: 10px; width: 24px; height: 24px; border-radius: 50%; background: #f0f5f1; pointer-events: none; }
+    .select-control::after { content: ""; position: absolute; right: 19px; top: 17px; width: 6px; height: 6px; border-right: 1.5px solid var(--accent); border-bottom: 1.5px solid var(--accent); transform: rotate(45deg); pointer-events: none; }
+    select { appearance: none; -webkit-appearance: none; padding: 8px 44px 8px 14px; }
+    input:hover, select:hover { border-color: #9ab1a2; }
+    .result-line { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: 12px; color: var(--muted); font-size: 12px; }
+    .text-button { color: var(--accent); background: none; padding: 3px 0; font-size: 13px; }
+    .text-button:disabled { color: #96a19a; cursor: default; }
+    .candidate-list { min-height: 0; flex: 1; overflow-y: auto; overscroll-behavior-y: contain; scrollbar-gutter: stable; padding: 8px; }
+    .candidate-list::-webkit-scrollbar, .directory::-webkit-scrollbar { width: 8px; }
+    .candidate-list::-webkit-scrollbar-thumb, .directory::-webkit-scrollbar-thumb { border: 2px solid #fbfcfa; border-radius: 10px; background: #b3c5b9; }
+    @supports not selector(::-webkit-scrollbar) {
+      .candidate-list, .directory { scrollbar-width: thin; scrollbar-color: #b3c5b9 transparent; }
+    }
+    .group-heading { display: flex; justify-content: space-between; color: var(--muted); font-size: 12px; font-weight: 500; padding: 13px 10px 7px; }
+    .candidate-link { display: block; padding: 11px 11px 12px; margin-bottom: 4px; color: var(--ink); text-decoration: none; border-radius: 7px; border: 1px solid transparent; }
+    .candidate-link:hover { background: #f0f4ef; }
+    .candidate-link[aria-current="true"] { background: var(--soft); border-color: #c6dece; }
+    .candidate-meta { display: flex; gap: 9px; align-items: center; font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+    .candidate-id { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 12px; color: var(--accent); }
+    .candidate-name { font-size: 15px; font-weight: 600; line-height: 1.5; }
+    .candidate-benefit { color: var(--muted); font-size: 12px; line-height: 1.6; margin-top: 5px; }
+    .detail-pane { min-width: 0; scroll-margin-top: var(--header-height); }
+    .detail-toolbar { display: flex; justify-content: space-between; align-items: center; min-height: 49px; gap: 12px; padding: 10px 26px; border-bottom: 1px solid var(--line); font-size: 12px; color: var(--muted); }
+    .detail-position { overflow-wrap: anywhere; }
+    .detail-navigation { display: flex; gap: 18px; flex-shrink: 0; }
+    .detail-navigation a { text-decoration: none; font-size: 13px; }
+    .detail { max-width: 1280px; margin: auto; padding: 27px 32px 40px; }
+    .detail-kicker { display: flex; align-items: center; flex-wrap: wrap; gap: 9px; color: var(--muted); font-size: 13px; margin-bottom: 10px; }
+    .detail h2 { font-size: clamp(23px, 2.05vw, 29px); letter-spacing: -.015em; }
+    .badge { display: inline-block; font-size: 12px; line-height: 1.7; border-radius: 4px; padding: 2px 7px; background: #edf1f3; color: #566d7b; }
+    .badge.high { background: #f8e3de; color: #a1402f; }
+    .badge.medium { background: #fbf1de; color: var(--amber); }
+    .badge.low { background: #edf1f3; color: #566d7b; }
+    .filtered-notice { background: #fff7e8; color: var(--amber); padding: 9px 12px; border-radius: 6px; margin-top: 16px; font-size: 13px; }
+    .summary { display: grid; gap: 12px; margin-top: 22px; }
+    .summary > div { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 15px; }
+    .summary dt { color: var(--muted); }
+    .reason { border-left: 3px solid #6c9f81; padding: 10px 14px; background: #f4f8f3; margin-top: 22px; font-size: 14px; }
+    .reason strong { color: var(--accent); font-weight: 600; margin-right: 8px; }
+    .adr { background: #fff6e5; border-color: #b98937; color: #82531c; }
+    .section-heading { font-size: 17px; margin: 27px 0 12px; }
+    .diagram-legend { display: flex; flex-wrap: wrap; gap: 7px 15px; margin: 0 0 16px; padding: 0; list-style: none; color: var(--muted); font-size: 13px; line-height: 1.6; }
+    .diagram-legend li { display: flex; gap: 7px; align-items: baseline; }
+    .legend-symbol { position: relative; display: inline-block; flex: 0 0 16px; width: 16px; height: 11px; border: 1px solid; align-self: center; }
+    .legend-symbol.line { flex-basis: 22px; width: 22px; height: 0; border-width: 2px 0 0; }
+    .legend-symbol.circle { flex-basis: 11px; width: 11px; border-radius: 50%; }
+    .legend-symbol.has-arrow::after { content: ""; position: absolute; right: 0; top: -5px; width: 6px; height: 6px; border-top: 2px solid; border-right: 2px solid; transform: rotate(45deg); }
+    .comparison { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; }
+    figure { min-width: 0; border: 1px solid var(--line); border-radius: 8px; padding: 17px; display: flex; flex-direction: column; background: #fafbf9; }
+    figure.after { background: #f0f7f1; border-color: #d0e3d5; }
+    .figure-title { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+    .after .figure-title { color: var(--accent); }
+    .diagram { min-width: 0; overflow-x: auto; padding: 2px; }
+    .diagram-image { display: block; margin: 0 auto; max-width: none; }
+    .flow { display: grid; justify-items: center; width: 100%; max-width: 340px; margin: auto; }
+    .node { width: 100%; padding: 9px 10px; border: 1px solid #a7b9ac; border-radius: 5px; background: var(--white); text-align: center; font-size: 14px; line-height: 1.65; overflow-wrap: anywhere; }
+    .node.deep { background: var(--ink); color: var(--white); padding: 14px 10px; border: 2px solid var(--ink); }
+    .node small { display: block; margin-top: 5px; font-size: 14px; color: var(--muted); }
+    .node.deep small { color: #dbe6df; }
+    .arrow { color: #718679; padding: 3px 0; line-height: 1.4; font-size: 16px; }
+    figcaption { font-size: 14px; color: var(--muted); line-height: 1.65; margin-top: 16px; }
+    .diagram-status { font-size: 14px; color: var(--muted); padding: 18px 0; }
+    .diagram-status.error { color: var(--amber); }
+    .bullet-list { margin: 0; padding-left: 20px; }
+    .bullet-list li + li { margin-top: 6px; }
+    .evidence-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px; }
+    .evidence-grid .section-heading { font-size: 15px; margin-top: 24px; }
+    .evidence-grid ul, .evidence-grid p { font-size: 14px; color: var(--muted); }
+    .files { border-top: 1px solid var(--line); margin-top: 24px; padding-top: 19px; }
+    .files h3 { font-size: 14px; color: var(--muted); margin-bottom: 7px; }
+    .files ul { padding-left: 17px; margin: 0; }
+    code { font: 13px/1.8 ui-monospace, SFMono-Regular, Consolas, monospace; overflow-wrap: anywhere; }
+    .related { margin-top: 23px; }
+    .related h3 { font-size: 14px; margin-bottom: 8px; }
+    .related a { display: block; font-size: 14px; padding: 3px 0; }
+    .empty { padding: 36px 18px; text-align: center; color: var(--muted); font-size: 14px; }
+    .empty strong { display: block; font-size: 16px; color: var(--ink); margin-bottom: 6px; }
+    .empty .text-button { margin-top: 14px; }
+    .notice { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); padding: 10px 18px; background: var(--ink); color: white; border-radius: 8px; font-size: 14px; z-index: 5; max-width: calc(100% - 32px); }
+    .fatal { margin: 30px; padding: 24px; border: 1px solid #d4b276; background: #fff8e9; border-radius: 10px; }
+    @media (max-width: 1180px) {
+      .workspace { grid-template-columns: 292px minmax(0, 1fr); }
+      .detail { padding: 25px 24px 36px; }
+      .flow { max-width: 380px; }
+    }
+    @media (min-width: 761px) and (max-height: 620px) {
+      .directory { overflow-y: auto; overscroll-behavior-y: contain; }
+      .candidate-list { flex: none; overflow-y: visible; }
+    }
+    @media (max-width: 760px) {
+      :root { --header-height: 56px; }
+      .page-header { padding: 10px 16px; gap: 10px; }
+      .page-header h1 { flex: 1; font-size: 17px; }
+      .header-totals { padding: 3px 8px; font-size: 11px; }
+      .page-header > .date { display: none; }
+      .context-date { display: block; margin-top: 8px; color: var(--muted); }
+      .workspace { display: block; }
+      .directory { position: static; display: block; height: auto; border-right: 0; }
+      .candidate-list { max-height: 45vh; max-height: 45dvh; border-bottom: 1px solid var(--line); }
+      .filters { padding: 15px; }
+      .directory-title { margin-bottom: 10px; }
+      .result-line { margin-top: 8px; }
+      .detail-toolbar { padding: 12px 18px; min-height: 56px; }
+      .detail-position { display: none; }
+      .detail { padding: 24px 20px 40px; }
+      .detail h2 { font-size: 25px; }
+      .evidence-grid { grid-template-columns: 1fr; gap: 0; }
+      .summary > div { gap: 12px; }
+    }
+    @media print {
+      html, body { height: auto; background: white; }
+      .report { min-height: 0; display: block; }
+      .page-header, .directory, .detail-toolbar, .notice { display: none; }
+      .workspace, .detail-pane { display: block !important; }
+      .detail { max-width: none; padding: 0; }
+      figure { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <main class="report" id="report">
+    <header class="page-header">
+      <h1 id="project-title"></h1>
+      <p class="header-totals"><strong id="total-count"></strong> <span id="total-label"></span></p>
+      <p class="date" id="report-date"></p>
+      <details class="report-info">
+        <summary aria-label="报告信息" title="报告范围与说明">i</summary>
+        <div class="info-panel">
+          <p class="info-project" id="info-project"></p>
+          <p class="context-date" id="info-date"></p>
+          <p class="scope" id="report-scope"></p>
+          <p class="note" id="report-note"></p>
+          <div class="distribution" id="distribution" aria-label="严重程度分布"></div>
+        </div>
+      </details>
+    </header>
+    <section class="workspace" aria-label="浏览发现">
+      <aside class="directory" aria-labelledby="directory-title">
+        <div class="filters">
+          <h2 class="directory-title" id="directory-title">全部发现</h2>
+          <div class="filter-fields">
+            <label>子系统<span class="select-control"><select id="subsystem" aria-label="子系统"><option value="">全部子系统</option></select></span></label>
+            <label>严重程度<span class="select-control"><select id="priority" aria-label="严重程度"><option value="">全部档位</option></select></span></label>
+            <label>搜索<input id="search" type="search" placeholder="搜索编号、问题、方案或文件…" autocomplete="off"></label>
+          </div>
+          <div class="result-line"><span id="result-count" role="status" aria-live="polite"></span><button class="text-button" id="clear-filters" type="button">清空筛选</button></div>
+        </div>
+        <nav class="candidate-list" id="candidate-list" aria-label="发现目录" tabindex="0"></nav>
+      </aside>
+      <section class="detail-pane" aria-label="发现详情">
+        <div class="detail-toolbar">
+          <span class="detail-position" id="detail-position"></span>
+          <nav class="detail-navigation" id="detail-navigation" aria-label="浏览筛选结果"></nav>
+        </div>
+        <article class="detail" id="detail"></article>
+      </section>
+    </section>
+  </main>
+  <p class="notice" id="notice" role="status" hidden></p>
+  <noscript><p class="fatal">请启用 JavaScript 后浏览这份报告。搜索、筛选与发现详情都保存在本文件中。</p></noscript>
+
+  <!-- 复用本实现时替换以下虚构数据；序列化后把小于号转义为 \u003c，防止项目文本提前闭合 script。 -->
+  <script type="application/json" id="report-data">
+  {
+    "project": "订单项目代码库体检",
+    "date": "2026-10-08",
+    "scope": "检查范围：订单接入、支付与库存；按模块分片，六类判据逐项核验。",
+    "note": "示例项目，全部发现与证据均为虚构。",
+    "candidates": [
+      {
+        "id": "A01", "subsystem": "订单", "title": "README 说的分层与实际调用相反", "priority": "high", "criterion": "声明与规则漂移 · README 分层声明与实际调用",
+        "problem": "README 声明接入层不直接碰存储，实际订单接入直接查询数据库细节。",
+        "proposal": "先按实际结构修正 README 的分层说明；是否恢复服务层，待相关需求立项再定。",
+        "benefits": ["后来者按真实结构理解代码，不再被文档误导。", "评审与交接可直接引用一致的分层描述。"],
+        "reason": "按 README 找分层会走错方向，新人和 Agent 都会被误导。",
+        "impact": "涉及 README 分层章节与订单接入、库存两处调用方说明。",
+        "evidence": ["声明：README『接入层只通过服务层访问存储』（README.md 分层一节）。", "现状：src/orders/create-order.ts 直接 import src/db/query 的数据库模块。"],
+        "uncertainties": ["需确认服务层缺失是有意简化还是未完成迁移。"],
+        "files": ["README.md", "src/orders/create-order.ts", "src/orders/import-orders.ts", "src/inventory/reserve-stock.ts"],
+        "related": [{"id": "A02", "relation": "关联", "note": "文档修正与重复整理互不阻塞。"}],
+        "diagrams": {
+          "before": {"kind": "flow", "title": "现状 · 文档声明的调用路径", "caption": "README 说接入层经过服务层访问存储。", "legend": [{"label": "箭头表示调用方向", "shape": "line", "arrow": true}], "nodes": [{"label": "接入层"}, {"label": "服务层"}, {"label": "存储层"}]},
+          "after": {"kind": "flow", "title": "处理后 · 文档按实际路径修正", "caption": "README 改为描述实际调用（接入直查存储）；若日后立项恢复服务层，另出方案。", "legend": [{"label": "箭头表示调用方向", "shape": "line", "arrow": true}], "nodes": [{"label": "接入层"}, {"label": "存储层"}]}
+        }
+      },
+      {
+        "id": "A02", "subsystem": "订单", "title": "订单校验规则在三处各写一遍", "priority": "medium", "criterion": "重复与复用 · 同一业务规则的重复实现",
+        "problem": "金额与库存校验在网页下单、批量导入和开放接口各实现一份，规则一改要记得改三处。",
+        "proposal": "下次任务动到任一入口时，顺手把校验收进共享实现；现在只登记，不专门立项。",
+        "benefits": ["三处入口共用同一份校验，改一处全生效。", "单元测试围绕一份规则写；各入口仍需各自的集成测试。"],
+        "reason": "同一规则三处维护，漏改一处就是事故，且没有安全网。",
+        "impact": "涉及三个入口的调用方式；合并后行为以现网表现为准，需逐一核对。",
+        "evidence": ["金额上限与库存预占判断各写一遍：create-order.ts 的 validateOrder、import-orders.ts 的 validateBatch、open-orders.ts 的 checkOrder，条件与顺序一致。"],
+        "uncertainties": ["需确认开放接口是否有调用方依赖各自独立的错误文案。"],
+        "files": ["src/orders/create-order.ts", "src/orders/import-orders.ts", "src/api/open-orders.ts"],
+        "related": [{"id": "A01", "relation": "关联", "note": "重复整理与文档修正可独立进行。"}],
+        "diagrams": {
+          "before": {"kind": "svg", "title": "现状 · 三处各写一遍", "caption": "三个入口各自维护同一套校验规则。", "legend": [{"label": "模块", "shape": "box", "stroke": "#a7b9ac", "fill": "#ffffff"}], "source": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 560 220\">\u003cstyle>text{font:14px sans-serif;fill:#233542}rect{fill:#fff;stroke:#a7b9ac}\u003c/style>\u003crect x=\"20\" y=\"20\" width=\"150\" height=\"48\" rx=\"5\"/>\u003ctext x=\"95\" y=\"49\" text-anchor=\"middle\">网页下单\u003c/text>\u003crect x=\"205\" y=\"20\" width=\"150\" height=\"48\" rx=\"5\"/>\u003ctext x=\"280\" y=\"49\" text-anchor=\"middle\">批量导入\u003c/text>\u003crect x=\"390\" y=\"20\" width=\"150\" height=\"48\" rx=\"5\"/>\u003ctext x=\"465\" y=\"49\" text-anchor=\"middle\">开放接口\u003c/text>\u003crect x=\"20\" y=\"130\" width=\"150\" height=\"48\" rx=\"5\"/>\u003ctext x=\"95\" y=\"159\" text-anchor=\"middle\">各自校验\u003c/text>\u003crect x=\"205\" y=\"130\" width=\"150\" height=\"48\" rx=\"5\"/>\u003ctext x=\"280\" y=\"159\" text-anchor=\"middle\">各自校验\u003c/text>\u003crect x=\"390\" y=\"130\" width=\"150\" height=\"48\" rx=\"5\"/>\u003ctext x=\"465\" y=\"159\" text-anchor=\"middle\">各自校验\u003c/text>\u003c/svg>"},
+          "after": {"kind": "svg", "title": "建议 · 收进共享实现", "caption": "三个入口调用同一份校验，改一处全生效。", "legend": [{"label": "模块", "shape": "box", "stroke": "#a7b9ac", "fill": "#ffffff"}, {"label": "收拢点", "shape": "box", "stroke": "#233542", "fill": "#233542"}], "source": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 560 220\">\u003cstyle>text{font:14px sans-serif;fill:#233542}rect{fill:#fff;stroke:#a7b9ac}line{stroke:#718679;stroke-width:2}\u003c/style>\u003crect x=\"20\" y=\"20\" width=\"150\" height=\"48\" rx=\"5\"/>\u003ctext x=\"95\" y=\"49\" text-anchor=\"middle\">网页下单\u003c/text>\u003crect x=\"205\" y=\"20\" width=\"150\" height=\"48\" rx=\"5\"/>\u003ctext x=\"280\" y=\"49\" text-anchor=\"middle\">批量导入\u003c/text>\u003crect x=\"390\" y=\"20\" width=\"150\" height=\"48\" rx=\"5\"/>\u003ctext x=\"465\" y=\"49\" text-anchor=\"middle\">开放接口\u003c/text>\u003crect x=\"175\" y=\"130\" width=\"210\" height=\"48\" rx=\"5\" style=\"fill:#233542;stroke:#233542\"/>\u003ctext x=\"280\" y=\"159\" text-anchor=\"middle\" style=\"fill:#fff\">校验模块\u003c/text>\u003cline x1=\"95\" y1=\"68\" x2=\"220\" y2=\"130\"/>\u003cline x1=\"280\" y1=\"68\" x2=\"280\" y2=\"130\"/>\u003cline x1=\"465\" y1=\"68\" x2=\"340\" y2=\"130\"/>\u003c/svg>"}
+        }
+      },
+      {
+        "id": "A03", "subsystem": "支付", "title": "旧支付通知入口已无调用", "priority": "low", "criterion": "死代码与遗留 · 无用途代码（已查实）",
+        "problem": "新版通知切换后，旧入口及其专用辅助函数留在代码里，查引用未见调用。",
+        "proposal": "用途已按三步核验（引用、配置注册、对外约定均未命中），下次动到支付模块时顺手删除。",
+        "benefits": ["支付模块少一层误导入口，搜索结果更干净。", "旧入口与专用辅助删净后，模块内没有死路径，静态检查不再误报。"],
+        "reason": "已查实无引用，删除不影响理解与修改，属可安全清理的冗余。",
+        "impact": "仅删除旧入口文件与两处专用辅助函数。",
+        "evidence": ["legacy-notify.ts 的导出 legacyNotify 全仓无引用；config/notify.ts 的注册表与 webhook 路由均指向新入口。"],
+        "uncertainties": [],
+        "files": ["src/payments/legacy-notify.ts", "src/payments/notify-helpers.ts"],
+        "related": [],
+        "diagrams": {
+          "before": {"kind": "svg", "title": "现状 · 新旧入口并存", "caption": "两个入口是并列关系，不是先后；旧入口已无调用，仍留在代码里。", "legend": [{"label": "模块", "shape": "box", "stroke": "#a7b9ac", "fill": "#ffffff"}], "source": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 480 120\">\u003cstyle>text{font:14px sans-serif;fill:#233542}rect{fill:#fff;stroke:#a7b9ac}\u003c/style>\u003crect x=\"20\" y=\"35\" width=\"190\" height=\"48\" rx=\"5\"/>\u003ctext x=\"115\" y=\"64\" text-anchor=\"middle\">新通知入口 · 在用\u003c/text>\u003crect x=\"270\" y=\"35\" width=\"190\" height=\"48\" rx=\"5\"/>\u003ctext x=\"365\" y=\"64\" text-anchor=\"middle\">旧通知入口 · 无调用\u003c/text>\u003c/svg>"},
+          "after": {"kind": "flow", "title": "处理后 · 只留新入口", "caption": "删除旧入口，搜索支付通知只看到在用的实现。", "legend": [{"label": "模块", "shape": "box", "stroke": "#a7b9ac", "fill": "#ffffff"}], "nodes": [{"label": "新通知入口", "detail": "配置与路由指向这里"}]}
+        }
+      }
+    ]
+  }
+  </script>
+  <script>
+    (() => {
+      "use strict";
+      const priorities = {
+        "high": { label: "高", desc: "已经在把人带偏，或让修改变危险", className: "high" },
+        "medium": { label: "中", desc: "确实抬高理解或修改成本，但没到带偏的程度", className: "medium" },
+        "low": { label: "低", desc: "不构成实际额外成本，清理主要为整洁", className: "low" }
+      };
+      const $ = id => document.getElementById(id);
+      const el = (tag, className, text) => {
+        const node = document.createElement(tag);
+        if (className) node.className = className;
+        if (text !== undefined) node.textContent = text;
+        return node;
+      };
+      const link = (candidate, className, text) => {
+        const node = el("a", className, text);
+        node.href = "#" + candidate.id;
+        node.dataset.candidate = candidate.id;
+        return node;
+      };
+      const list = (items, className = "bullet-list") => {
+        const node = el("ul", className);
+        items.forEach(item => node.append(el("li", "", item)));
+        return node;
+      };
+      const safeHref = href => {
+        try {
+          const url = new URL(href, location.href);
+          return ["http:", "https:"].includes(url.protocol) || (url.protocol === "file:" && !url.hostname) ? url.href : null;
+        } catch { return null; }
+      };
+      let report;
+      try {
+        report = JSON.parse($("report-data").textContent);
+        const fail = path => { throw new Error(path + " 不正确或缺失"); };
+        if (typeof report.project !== "string" || !report.project.trim()) fail("project");
+        if (typeof report.date !== "string" || !report.date.trim()) fail("date");
+        if (typeof report.scope !== "string" || !report.scope.trim()) fail("scope");
+        if (typeof report.note !== "string") fail("note（可填空字符串）");
+        if (!Array.isArray(report.candidates)) fail("candidates 数组");
+        const ids = new Set();
+        report.candidates.forEach((candidate, index) => {
+          const at = "candidates[" + index + "]";
+          if (!/^A\d{2,}$/.test(candidate.id) || ids.has(candidate.id)) fail(at + ".id（须唯一，格式如 A01）");
+          ids.add(candidate.id);
+          if (!priorities[candidate.priority]) fail(at + ".priority（严重程度）");
+          if (typeof candidate.criterion !== "string" || !["组织与体量", "重复与复用", "死代码与遗留", "测试与工程入口", "声明与规则漂移", "命名与注释"].some(name => candidate.criterion === name || candidate.criterion.startsWith(name + " ·"))) fail(at + ".criterion（判据须为六短名之一，可接「·」具体化）");
+          for (const field of ["subsystem", "title", "problem", "proposal", "reason", "impact"]) {
+            if (typeof candidate[field] !== "string" || !candidate[field].trim()) fail(at + "." + field);
+          }
+          for (const field of ["uncertainties", "files"]) {
+            if (!Array.isArray(candidate[field]) || !candidate[field].every(value => typeof value === "string")) fail(at + "." + field);
+          }
+          if (!Array.isArray(candidate.evidence) || !candidate.evidence.length || !candidate.evidence.every(value => typeof value === "string" && value.trim())) fail(at + ".evidence（须至少一条非空证据）");
+          if (!Array.isArray(candidate.benefits) || candidate.benefits.length < 2 || candidate.benefits.length > 3 || !candidate.benefits.every(value => typeof value === "string")) fail(at + ".benefits（须 2 至 3 条）");
+          if (!Array.isArray(candidate.related)) fail(at + ".related（无关联给空数组）");
+          const relatedSeen = new Set();
+          for (const relation of candidate.related) {
+            if (!relation || typeof relation.id !== "string" || !["前置", "替代", "关联"].includes(relation.relation)) fail(at + ".related（每项须 id 与 relation（前置/替代/关联））");
+            if (typeof relation.note !== "string" || !relation.note.trim()) fail(at + ".related.note（须写理由）");
+            if (relation.id === candidate.id) fail(at + ".related 不能指向自己");
+            if (relatedSeen.has(relation.id)) fail(at + ".related 重复指向 " + relation.id);
+            relatedSeen.add(relation.id);
+          }
+          if (!candidate.diagrams?.before || !candidate.diagrams?.after) fail(at + ".diagrams（须 before 与 after）");
+          for (const [side, diagram] of Object.entries(candidate.diagrams)) {
+            const dp = at + ".diagrams." + side;
+            if (typeof diagram.kind !== "string" || !["flow", "svg"].includes(diagram.kind)) fail(dp + ".kind");
+            if (typeof diagram.title !== "string" || !diagram.title.trim()) fail(dp + ".title");
+            if (typeof diagram.caption !== "string" || !diagram.caption.trim()) fail(dp + ".caption");
+            if (diagram.kind === "flow" && (!Array.isArray(diagram.nodes) || !diagram.nodes.length || !diagram.nodes.every(node => node && typeof node.label === "string"))) fail(dp + ".nodes");
+            if (diagram.kind !== "flow" && typeof diagram.source !== "string") fail(dp + ".source");
+            if (!Array.isArray(diagram.legend) || !diagram.legend.length || !diagram.legend.every(item => item && typeof item.label === "string" && ["box", "line", "circle"].includes(item.shape))) fail(dp + ".legend（须至少一条，含 label 与 box / line / circle 图形）");
+          }
+        });
+        report.candidates.forEach((candidate, index) => {
+          for (const relation of candidate.related) {
+            if (!ids.has(relation.id)) throw new Error("candidates[" + index + "].related 指向不存在的编号 " + relation.id);
+          }
+        });
+      } catch (error) {
+        $("report").replaceWith(el("p", "fatal", "报告数据无法读取：" + error.message + "。请检查 report-data 中的 JSON；若内容含 < 或 script 结束标签，先按通用规范转义为 \\u003c。"));
+        return;
+      }
+
+      const candidates = report.candidates;
+      const subsystems = [...new Set(candidates.map(candidate => candidate.subsystem))];
+      const browsingOrder = subsystems.flatMap(subsystem => candidates.filter(candidate => candidate.subsystem === subsystem));
+      const byId = new Map(candidates.map(candidate => [candidate.id, candidate]));
+      const searchable = new Map(candidates.map(candidate => [candidate.id, [candidate.id, candidate.subsystem, candidate.title, candidate.problem, candidate.proposal, ...candidate.files].join(" ").toLocaleLowerCase()]));
+      let matching = browsingOrder;
+      let selected = candidates[0]?.id;
+      let listPageScroll = 0;
+      let renderVersion = 0;
+      let noticeTimer;
+      const diagramCache = new Map();
+      // 页面位置由路由恢复，目录自己的滚动位置在重绘时保留。
+      history.scrollRestoration = "manual";
+
+      document.title = report.project;
+      $("project-title").textContent = report.project;
+      $("project-title").title = report.project;
+      $("info-project").textContent = report.project;
+      $("report-date").textContent = report.date;
+      $("info-date").textContent = "报告日期：" + report.date;
+      $("report-scope").textContent = report.scope;
+      $("report-note").textContent = report.note || "";
+      $("total-count").textContent = candidates.length;
+      $("total-label").textContent = "项发现 · " + subsystems.length + " 个子系统";
+      for (const [priority, style] of Object.entries(priorities)) {
+        const count = candidates.filter(candidate => candidate.priority === priority).length;
+        const item = el("span");
+        item.title = style.desc;
+        const dot = el("i", "dot " + style.className);
+        dot.setAttribute("aria-hidden", "true");
+        item.append(dot, document.createTextNode(style.label + " " + count), el("small", "dist-desc", style.desc));
+        $("distribution").append(item);
+        const option = el("option", "", style.label);
+        option.value = priority;
+        $("priority").append(option);
+      }
+      subsystems.forEach(subsystem => {
+        const option = el("option", "", subsystem);
+        option.value = subsystem;
+        $("subsystem").append(option);
+      });
+
+      function renderDirectory() {
+        const container = $("candidate-list");
+        const scrollTop = container.scrollTop;
+        container.replaceChildren();
+        $("result-count").textContent = matching.length + " 项匹配 / 共 " + candidates.length + " 项";
+        $("clear-filters").disabled = !($("search").value || $("subsystem").value || $("priority").value);
+        if (!matching.length) {
+          const empty = el("div", "empty");
+          empty.append(el("strong", "", candidates.length ? "没有匹配的发现" : "本次检查未发现问题"), el("p", "", candidates.length ? "试试其他关键词，或清空筛选。" : "可回看本次检查范围。"));
+          if (candidates.length) {
+            const clear = el("button", "text-button", "清空筛选");
+            clear.type = "button";
+            clear.addEventListener("click", clearFilters);
+            empty.append(clear);
+          }
+          container.append(empty);
+        }
+        for (const subsystem of subsystems) {
+          const group = matching.filter(candidate => candidate.subsystem === subsystem);
+          if (!group.length) continue;
+          const heading = el("h3", "group-heading");
+          heading.append(el("span", "", subsystem), el("span", "", group.length + " 项"));
+          container.append(heading);
+          group.forEach(candidate => {
+            const item = link(candidate, "candidate-link");
+            item.setAttribute("aria-current", String(candidate.id === selected));
+            const meta = el("div", "candidate-meta");
+            meta.append(el("span", "candidate-id", candidate.id), el("span", "", priorities[candidate.priority].label));
+            item.append(meta, el("p", "candidate-name", candidate.title), el("p", "candidate-benefit", candidate.benefits[0] || candidate.reason));
+            container.append(item);
+          });
+        }
+        container.scrollTop = scrollTop;
+        updateNavigation();
+      }
+
+      function updateNavigation() {
+        const index = matching.findIndex(candidate => candidate.id === selected);
+        $("detail-position").textContent = !selected ? (candidates.length ? "没有匹配的发现" : "暂无发现") : index >= 0 ? "筛选结果 " + (index + 1) + " / " + matching.length + " · " + selected : selected + " · 不在当前筛选结果中";
+        const nav = $("detail-navigation");
+        nav.replaceChildren();
+        if (index > 0) nav.append(link(matching[index - 1], "", "← 上一项"));
+        if (index >= 0 && index < matching.length - 1) nav.append(link(matching[index + 1], "", "下一项 →"));
+        const filtered = $("filtered-notice");
+        if (filtered) filtered.hidden = index >= 0;
+      }
+
+      function revealSelection({ keepFiltersVisible = false } = {}) {
+        const active = $("candidate-list").querySelector('[aria-current="true"]');
+        if (!active) return;
+        const directory = document.querySelector(".directory");
+        const scroller = getComputedStyle(directory).overflowY === "auto" ? directory : $("candidate-list");
+        if (keepFiltersVisible && scroller === directory) return;
+        const bounds = scroller.getBoundingClientRect();
+        const item = active.getBoundingClientRect();
+        // 只移动目录内部，避免 scrollIntoView 同时把页面从详情拉回目录。
+        if (item.top < bounds.top) scroller.scrollTop += item.top - bounds.top;
+        else if (item.bottom > bounds.bottom) scroller.scrollTop += item.bottom - bounds.bottom;
+      }
+
+      function filterCandidates() {
+        const words = $("search").value.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);
+        const subsystem = $("subsystem").value;
+        const priority = $("priority").value;
+        matching = browsingOrder.filter(candidate => (!subsystem || candidate.subsystem === subsystem) && (!priority || candidate.priority === priority) && words.every(word => searchable.get(candidate.id).includes(word)));
+        const previous = selected;
+        if (!matching.some(candidate => candidate.id === selected)) selected = matching[0]?.id;
+        // 筛选属于同一次查找，用替换历史更新链接，避免每次输入都增加后退步骤。
+        const url = new URL(location.href);
+        url.hash = selected || "";
+        history.replaceState(null, "", url);
+        renderDirectory();
+        $("candidate-list").scrollTop = 0;
+        revealSelection({ keepFiltersVisible: true });
+        if (previous !== selected || !$("detail-title")) {
+          renderDetail();
+          // 桌面筛选区固定，切换详情可从头读；窄屏仍停在正在操作的筛选区。
+          if (matchMedia("(min-width: 761px)").matches) document.querySelector(".detail-pane").scrollIntoView({ block: "start" });
+        }
+      }
+
+      function clearFilters() {
+        $("search").value = "";
+        $("subsystem").value = "";
+        $("priority").value = "";
+        filterCandidates();
+      }
+
+      function section(title, content) {
+        const node = el("section");
+        node.append(el("h3", "section-heading", title), content);
+        return node;
+      }
+
+      function diagramLegend(diagram) {
+        let items = diagram.legend;
+        if (!items && diagram.kind === "flow" && Array.isArray(diagram.nodes)) {
+          items = [];
+          if (diagram.nodes?.some(node => !node.deep)) items.push({ label: "模块", shape: "box", stroke: "#a7b9ac", fill: "#fff" });
+          if (diagram.nodes?.some(node => node.deep)) items.push({ label: "重点模块", shape: "box", stroke: "#233542", fill: "#233542" });
+          if (diagram.nodes?.length > 1) items.push({ label: "执行顺序", shape: "line", stroke: "#718679", arrow: true });
+        }
+        if (!items?.length) return null;
+        const legend = el("ul", "diagram-legend");
+        legend.setAttribute("aria-label", "图例");
+        for (const item of items) {
+          const row = el("li");
+          const symbol = el("span", "legend-symbol " + item.shape + (item.shape === "line" && item.arrow ? " has-arrow" : ""));
+          symbol.setAttribute("aria-hidden", "true");
+          symbol.style.color = item.stroke || "#233542";
+          symbol.style.backgroundColor = item.fill || "transparent";
+          if (item.dashed) symbol.style.borderStyle = "dashed";
+          row.append(symbol, el("span", "", item.label + (item.description ? "：" + item.description : "")));
+          legend.append(row);
+        }
+        return legend;
+      }
+
+      function renderDetail() {
+        const version = ++renderVersion;
+        const candidate = byId.get(selected);
+        const detail = $("detail");
+        detail.replaceChildren();
+        if (!candidate) {
+          detail.removeAttribute("aria-labelledby");
+          detail.append(el("p", "empty", candidates.length ? "没有符合当前条件的发现，请调整左侧筛选或清空筛选。" : "本次检查范围内未发现问题。"));
+          return;
+        }
+        const kicker = el("p", "detail-kicker");
+        const priority = priorities[candidate.priority];
+        kicker.append(el("span", "candidate-id", candidate.id), el("span", "", candidate.subsystem), el("span", "badge " + priority.className, priority.label));
+        const title = el("h2", "", candidate.title);
+        title.id = "detail-title";
+        title.tabIndex = -1;
+        detail.setAttribute("aria-labelledby", title.id);
+        const filtered = el("p", "filtered-notice", "当前发现不在筛选结果中。目录仍保留你的筛选条件。" );
+        filtered.id = "filtered-notice";
+        const summary = el("dl", "summary");
+        [["判据", candidate.criterion], ["问题与现状", candidate.problem], ["处理建议", candidate.proposal]].forEach(([label, text]) => {
+          const row = el("div");
+          row.append(el("dt", "", label), el("dd", "", text));
+          summary.append(row);
+        });
+        const reason = el("p", "reason");
+        reason.append(el("strong", "", "严重程度依据"), document.createTextNode(candidate.reason));
+        detail.append(kicker, title, filtered, summary, reason);
+        if (candidate.adr) {
+          const adr = el("p", "reason adr");
+          const href = typeof candidate.adr.href === "string" ? safeHref(candidate.adr.href) : null;
+          const reference = el(href ? "a" : "span", "", candidate.adr.id);
+          if (href) reference.href = href;
+          adr.append(document.createTextNode("与 "), reference, document.createTextNode(" 冲突；建议重开：" + candidate.adr.reason));
+          detail.append(adr);
+        }
+        const comparison = el("div", "comparison");
+        for (const side of ["before", "after"]) {
+          const diagram = candidate.diagrams[side];
+          const figure = el("figure", side);
+          const canvas = el("div", "diagram");
+          figure.append(el("p", "figure-title", diagram.title));
+          const legend = diagramLegend(diagram);
+          if (legend) figure.append(legend);
+          figure.append(canvas, el("figcaption", "", diagram.caption));
+          comparison.append(figure);
+          renderDiagram(canvas, diagram, candidate.id + ":" + side, version);
+        }
+        detail.append(section("现状与建议", comparison), section("处理后的改善", list(candidate.benefits)), section("处理波及范围", el("p", "", candidate.impact)));
+        const evidence = el("div", "evidence-grid");
+        evidence.append(section("已见证据", candidate.evidence.length ? list(candidate.evidence) : el("p", "", "暂无已核验证据。")), section("待确认", candidate.uncertainties.length ? list(candidate.uncertainties) : el("p", "", "本轮没有额外列出的待确认项。")));
+        detail.append(evidence);
+        const files = el("section", "files");
+        const fileList = el("ul");
+        candidate.files.forEach(path => {
+          const item = el("li");
+          item.append(el("code", "", path));
+          fileList.append(item);
+        });
+        files.append(el("h3", "", "涉及文件"), fileList);
+        detail.append(files);
+        const relations = (candidate.related || []).filter(relation => byId.has(relation.id));
+        if (relations.length) {
+          const related = el("section", "related");
+          related.append(el("h3", "", "相关发现"));
+          relations.forEach(relation => related.append(link(byId.get(relation.id), "", relation.relation + " · " + relation.id + " " + byId.get(relation.id).title + (relation.note ? "：" + relation.note : ""))));
+          detail.append(related);
+        }
+        updateNavigation();
+      }
+
+      function showNotice(text) {
+        clearTimeout(noticeTimer);
+        $("notice").textContent = text;
+        $("notice").hidden = false;
+        noticeTimer = setTimeout(() => { $("notice").hidden = true; }, 4500);
+      }
+
+      function route(focus = false) {
+        const id = location.hash.slice(1);
+        if (byId.has(id)) {
+          const changed = selected !== id;
+          selected = id;
+          renderDirectory();
+          revealSelection();
+          if (changed || !$("detail-title")) renderDetail();
+          if (focus) $("detail-title")?.focus({ preventScroll: true });
+          document.querySelector(".detail-pane").scrollIntoView({ block: "start" });
+        } else {
+          if (id && id !== "candidates") {
+            showNotice("找不到发现 " + id + "，请从目录重新选择。");
+            ++renderVersion;
+            const empty = el("div", "empty");
+            empty.append(el("strong", "", "这个链接没有对应的发现"), el("p", "", "报告中不存在编号 " + id + "，请在目录中选择其他发现。"));
+            $("detail").replaceChildren(empty);
+            $("detail").removeAttribute("aria-labelledby");
+            $("detail-position").textContent = "发现不存在";
+            $("detail-navigation").replaceChildren();
+          } else if (!$("detail-title")) renderDetail();
+          if (focus) {
+            const active = [...$("candidate-list").querySelectorAll("a")].find(item => item.dataset.candidate === selected);
+            (active || $("search")).focus({ preventScroll: true });
+            window.scrollTo(0, listPageScroll);
+          }
+        }
+      }
+
+      function svgImage(source, diagram) {
+        const parsed = new DOMParser().parseFromString(source, "image/svg+xml");
+        const svg = parsed.documentElement;
+        if (svg.localName !== "svg" || parsed.querySelector("parsererror")) throw new Error("syntax");
+        if (svg.querySelector("script,foreignObject,iframe,object,embed") || /url\s*\(\s*[\"']?(?!data:|#)/i.test(source) || /@import/i.test(source)) throw new Error("unsafe");
+        for (const element of svg.querySelectorAll("*")) {
+          if (element.getAttributeNames().some(name => name.toLowerCase().startsWith("on"))) throw new Error("unsafe");
+          for (const attribute of ["href", "xlink:href"]) {
+            const value = element.getAttribute(attribute)?.trim();
+            if (value && !value.startsWith("#") && !value.startsWith("data:image/")) throw new Error("unsafe");
+          }
+        }
+        const viewBox = svg.getAttribute("viewBox")?.trim().split(/[\s,]+/).map(Number);
+        const naturalWidth = viewBox?.length === 4 && viewBox[2] > 0 ? viewBox[2] : parseFloat(svg.getAttribute("width"));
+        const naturalHeight = viewBox?.length === 4 && viewBox[3] > 0 ? viewBox[3] : parseFloat(svg.getAttribute("height"));
+        if (!Number.isFinite(naturalWidth) || !Number.isFinite(naturalHeight)) throw new Error("syntax");
+        const width = Math.max(naturalWidth, Number(diagram.minWidth) || 0);
+        // 图以固有尺寸显示，避免把 14px 标签缩小；宽图只在图区滚动。img 隔离 SVG 内的脚本。
+        const image = el("img", "diagram-image");
+        image.alt = diagram.title + "。" + diagram.caption;
+        image.width = Math.ceil(width);
+        image.height = Math.ceil(width * naturalHeight / naturalWidth);
+        image.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
+        return image;
+      }
+
+      async function renderDiagram(canvas, diagram, cacheKey, version) {
+        const failure = () => {
+          if (version !== renderVersion || !canvas.isConnected) return;
+          canvas.replaceChildren(el("p", "diagram-status error", "图示无法显示：请检查内联图的语法、尺寸和外部引用。下方图注保留本项结论。"));
+        };
+        if (diagram.kind === "flow") {
+          const flow = el("div", "flow");
+          if (!Array.isArray(diagram.nodes) || !diagram.nodes.length) { queueMicrotask(failure); return; }
+          diagram.nodes.forEach((node, index) => {
+            if (index) {
+              const arrow = el("span", "arrow", "↓");
+              arrow.setAttribute("aria-hidden", "true");
+              flow.append(arrow);
+            }
+            const box = el("div", "node" + (node.deep ? " deep" : ""), node.label);
+            if (node.detail) box.append(el("small", "", node.detail));
+            flow.append(box);
+          });
+          canvas.append(flow);
+          return;
+        }
+        canvas.append(el("p", "diagram-status", "正在加载图示…"));
+        try {
+          const source = diagramCache.get(cacheKey) || diagram.source;
+          if (version !== renderVersion) return;
+          if (!source) throw new Error("syntax");
+          const image = svgImage(source, diagram);
+          image.addEventListener("error", failure);
+          canvas.replaceChildren(image);
+          diagramCache.set(cacheKey, source);
+        } catch (error) {
+          // 首次绘制发生在 article 接入 DOM 前，用微任务统一错误回填的时机。
+          queueMicrotask(failure);
+        }
+      }
+
+      $("search").addEventListener("input", filterCandidates);
+      $("subsystem").addEventListener("change", filterCandidates);
+      $("priority").addEventListener("change", filterCandidates);
+      $("clear-filters").addEventListener("click", clearFilters);
+      const reportInfo = document.querySelector(".report-info");
+      const dismissInfo = event => {
+        if (!reportInfo.contains(event.target)) reportInfo.open = false;
+      };
+      document.addEventListener("pointerdown", dismissInfo);
+      document.addEventListener("focusin", dismissInfo);
+      window.addEventListener("blur", () => { reportInfo.open = false; });
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && reportInfo.open) {
+          reportInfo.open = false;
+          reportInfo.querySelector("summary").focus({ preventScroll: true });
+          event.preventDefault();
+        }
+      });
+      window.addEventListener("hashchange", () => route(true));
+      document.addEventListener("click", event => {
+        const anchor = event.target.closest("a[data-candidate]");
+        if (anchor?.closest("#candidate-list")) listPageScroll = window.scrollY;
+        // 同一个 hash 不触发 hashchange；再次点击当前项时仍需定位到详情。
+        if (anchor && anchor.hash === location.hash) route(true);
+      });
+      renderDirectory();
+      route();
+    })();
+  </script>
+</body>
+</html>

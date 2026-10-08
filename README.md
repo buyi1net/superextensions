@@ -18,6 +18,7 @@ SuperExtensions 是一款面向 Claude Code、Codex、OpenCode、Pi、OMP (Oh My
 | [`code-review`](./skills/engineering/code-review/SKILL.md) | 分别检查代码变更是否符合规范和规格。 |
 | [`codebase-design`](./skills/engineering/codebase-design/SKILL.md) | 代码库的设计取舍与源码组织原则，涵盖简洁设计、功能归属、实现复用、深度模块与可测试性。 |
 | [`improve-codebase-architecture`](./skills/engineering/improve-codebase-architecture/SKILL.md) | 扫描代码库找深化机会，用可视化 HTML 报告摆出候选，挑中哪个就深挖哪个。 |
+| [`improve-codebase-audit`](./skills/engineering/improve-codebase-audit/SKILL.md) | 盘点存量代码库的结构、冗余、死代码、命名注释与规则护栏，产出 HTML 优化导航报告。 |
 | [`diagnosing-bugs`](./skills/engineering/diagnosing-bugs/SKILL.md) | 疑难 bug 和性能回归的诊断循环。 |
 | [`domain-modeling`](./skills/engineering/domain-modeling/SKILL.md) | 构建和完善项目领域模型，维护 GLOSSARY 与 ADR。 |
 | [`implement`](./skills/engineering/implement/SKILL.md) | 按规格说明、工单或直接任务实现代码。 |

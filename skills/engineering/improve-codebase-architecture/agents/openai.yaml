@@ -1,3 +1,5 @@
 interface:
   display_name: "深化模块"
-  short_description: "扫描代码库找深化机会,出HTML报告供你挑"
+  short_description: "扫描代码库找深化机会,用可视化 HTML 报告供你挑选."
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,5 @@
+interface:
+  display_name: "项目体检"
+  short_description: "扫描代码库找出死代码、重复实现、测试护栏、命名注释和规则漂移等问题."
+policy:
+  allow_implicit_invocation: false
