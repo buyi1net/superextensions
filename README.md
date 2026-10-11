@@ -148,23 +148,28 @@ pi remove git:github.com/buyi1net/superextensions
 
 ## OMP (Oh My Pi)
 
-OMP 是 pi-coding-agent 的同源二次开发版，原生读取本仓 `package.json` 的 `pi` 清单与 `.pi/extensions/`，每次用户提交提示时注入 constitution，不需要 OMP 专属适配文件。
+通过 OMP 的 marketplace 插件命令安装。OMP 会 git clone 本仓并从 `.claude-plugin/` 清单读取 skills 路径、从 `.pi/extensions/` 注入 constitution，安装后登记进 `~/.omp/plugins/installed_plugins.json`。
 
 ```bash
-# 安装
-omp install https://github.com/buyi1net/superextensions
+# 安装（首次）
+omp plugin marketplace add buyi1net/superextensions
+omp plugin install superextensions@superextensions
 
 # 验证
 omp plugin list
 
-# 更新（插件以 Git 依赖安装在 ~/.omp/plugins，不走 marketplace 升级命令）
-cd ~/.omp/plugins && bun update superextensions
+# 更新
+omp plugin marketplace update superextensions
+omp plugin upgrade superextensions@superextensions
 
 # 卸载
-omp plugin uninstall superextensions
+omp plugin uninstall superextensions@superextensions
+omp plugin marketplace remove superextensions
 ```
 
-安装或更新后重启 OMP。会话的 skill 列表应包含本仓 skill，系统提示末尾应出现 constitution 注入块。
+安装或更新后重启 OMP。会话的 skill 列表应包含本仓全部 skill，系统提示末尾应出现 constitution 注入块。
+
+注意：不要用 `omp install https://github.com/buyi1net/superextensions` 安装。那条命令走 npm Git 依赖通道，OMP 对它只扫 `skills/` 一级目录，嵌套分类的 skill 不会出现在会话里。
 
 ## Hermes Agent
 

@@ -9,8 +9,8 @@
  *   - Codex：plugin add 会二次完整 clone，不能 sparse（partial clone 缺 blob 会失败），
  *            必须保留原生完整缓存，不能在安装后删除仓库文件
  *   - OpenCode：先失效本插件的 Git 缓存，再调用原生 plugin 命令安装并注册
- *   - OMP：pi 同源 fork，原生读 package.json 的 pi 清单；已装走 bun update（git 依赖不走
- *          marketplace 升级），未装走 omp install
+ *   - OMP：marketplace 插件通道（omp plugin marketplace add + install）；不能用 omp install
+ *          <git-url>：npm git 依赖通道只扫 skills/ 一级目录，嵌套 skill 会丢
  *
  * 用法：
  *   node install.mjs                装四家
@@ -154,31 +154,48 @@ function rmOpencodeCache() {
 }
 
 // ---------- OMP (Oh My Pi) ----------
-// omp 是 pi 的同源 fork，原生读 package.json 的 pi 清单和 .pi/extensions，无需 omp 专属适配。
-// 插件以 bun git 依赖形式装在 ~/.omp/plugins：已装走 bun update 拉最新 commit（omp plugin
-// upgrade 只认 name@marketplace，管不到 git 依赖），未装走 omp install 首次安装。
+// omp 走 marketplace 插件通道：omp plugin marketplace add 会 git clone 本仓，omp plugin install
+// 登记进 ~/.omp/plugins/installed_plugins.json 并把 node_modules/superextensions 软链到版本化缓存。
+// 不能用 omp install <git-url>：那是 npm git 依赖通道，omp 对它只扫 skills/ 一级目录，
+// 嵌套分类 skill 全部丢失，会话里只剩 constitution。
 function installOmp() {
   log('\n=== OMP (Oh My Pi) ===');
   if (!has('omp')) { log('  跳过：未找到 omp CLI'); return; }
   const ompPlugins = path.join(HOME, '.omp', 'plugins');
-  let installed = false;
+  // 旧 npm git 依赖通道的残留：package.json dependencies 里有本插件就先卸掉，避免两条通道并存
+  let legacyInstalled = false;
   const pkgPath = path.join(ompPlugins, 'package.json');
   if (fs.existsSync(pkgPath)) {
     try {
       const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
-      installed = Boolean(pkg.dependencies?.[PLUGIN]);
+      legacyInstalled = Boolean(pkg.dependencies?.[PLUGIN]);
     } catch {}
   }
-  if (installed) {
-    shLoud(`bun update ${PLUGIN}`, { cwd: ompPlugins });
+  if (legacyInstalled) {
+    shLoud(`omp plugin uninstall ${PLUGIN}`);
+  }
+  // 已在 marketplace 通道：刷新 marketplace 缓存后升级；未装：添加 marketplace 再安装
+  let registered = false;
+  const installedReg = path.join(ompPlugins, 'installed_plugins.json');
+  if (fs.existsSync(installedReg)) {
+    try {
+      const reg = JSON.parse(fs.readFileSync(installedReg, 'utf8'));
+      registered = Boolean(reg.plugins?.[`${PLUGIN}@${MARKET}`]);
+    } catch {}
+  }
+  if (registered) {
+    shLoud(`omp plugin marketplace update ${MARKET}`);
+    shLoud(`omp plugin upgrade ${PLUGIN}@${MARKET}`);
   } else {
-    shLoud(`omp install ${GIT_URL}`);
+    tryQuiet(`omp plugin marketplace remove ${MARKET}`);           // 幂等：先清旧的
+    shLoud(`omp plugin marketplace add ${REPO}`);
+    shLoud(`omp plugin install ${PLUGIN}@${MARKET}`);
   }
   const skillsDir = path.join(ompPlugins, 'node_modules', PLUGIN, 'skills');
   if (!fs.existsSync(path.join(skillsDir, 'constitution', 'SKILL.md'))) {
     throw new Error('OMP 插件目录不完整：没找到 skills/constitution/SKILL.md');
   }
-  log('  ✓ OMP 已更新；omp 是 pi 同源 fork，.pi/extensions 原生注入 constitution，skills 由 pi 清单注册');
+  log('  ✓ OMP 已更新；marketplace 通道登记，.pi/extensions 原生注入 constitution，skills 走 .claude-plugin 清单全量注册');
 }
 
 // ---------- 卸载 ----------
@@ -226,8 +243,11 @@ function uninstallSelected(targets) {
     log('  OpenCode 已从 opencode.json 移除');
   }
   if (targets.omp && has('omp')) {
-    tryQuiet(`omp plugin uninstall ${PLUGIN}`);
-    rmDir(path.join(HOME, '.omp', 'plugins', 'node_modules', PLUGIN));   // uninstall 万一留残留，兜底删掉
+    tryQuiet(`omp plugin uninstall ${PLUGIN}@${MARKET}`);
+    tryQuiet(`omp plugin marketplace remove ${MARKET}`);
+    tryQuiet(`omp plugin uninstall ${PLUGIN}`);                    // 旧 npm git 依赖通道的卸法，幂等兜底
+    rmDir(path.join(HOME, '.omp', 'plugins', 'node_modules', PLUGIN),   // uninstall 万一留残留，兜底删掉
+          path.join(HOME, '.omp', 'plugins', 'cache', MARKET));
     log('  OMP 已卸');
   }
 }
@@ -263,5 +283,5 @@ if (failures.length) {
   log(`\n安装失败：${failures.join('、')}`);
   process.exitCode = 1;
 } else {
-  log('\n完成。Claude Code 使用精简 cache；Codex 保留原生完整 cache；OpenCode 使用原生 plugin 注册；OMP 以 bun git 依赖维护。');
+  log('\n完成。Claude Code 使用精简 cache；Codex 保留原生完整 cache；OpenCode 使用原生 plugin 注册；OMP 走 marketplace 插件通道。');
 }
