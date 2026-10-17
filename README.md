@@ -22,6 +22,7 @@ SuperExtensions 是一款面向 Claude Code、Codex、OpenCode、Pi、OMP (Oh My
 | [`diagnosing-bugs`](./skills/engineering/diagnosing-bugs/SKILL.md) | 疑难 bug 和性能回归的诊断循环。 |
 | [`domain-modeling`](./skills/engineering/domain-modeling/SKILL.md) | 构建和完善项目领域模型，维护 GLOSSARY 与 ADR。 |
 | [`implement`](./skills/engineering/implement/SKILL.md) | 按规格说明、工单或直接任务实现代码。 |
+| [`implement-spec`](./skills/engineering/implement-spec/SKILL.md) | 按工单图调度 worktree 并发或串行推进代码实现直至交付。 |
 | [`prototype`](./skills/engineering/prototype/SKILL.md) | 用一次性原型回答设计问题：验证状态模型或对比界面方案。 |
 | [`tdd`](./skills/engineering/tdd/SKILL.md) | 测试驱动开发循环与测试规范。 |
 | [`to-spec`](./skills/engineering/to-spec/SKILL.md) | 把当前对话的讨论与决策整理成规格说明并发布到项目跟踪。 |
