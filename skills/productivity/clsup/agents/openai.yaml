@@ -1,0 +1,5 @@
+interface:
+  display_name: "收尾清理"
+  short_description: "任务结束后打扫现场,清理日常办公,调研或开发产生的临时垃圾文件"
+policy:
+  allow_implicit_invocation: false
