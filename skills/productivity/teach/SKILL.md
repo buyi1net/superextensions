@@ -1,6 +1,7 @@
 ---
 name: teach
 description: 在这个工作区里教用户学会一项新技能或新概念,学习状态跨会话沉淀在文件里.
+disable-model-invocation: true
 ---
 
 # 教学
