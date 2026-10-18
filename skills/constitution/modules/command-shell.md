@@ -65,12 +65,12 @@ PowerShell 版本差异比较大.现代 Windows 自带的 `powershell.exe` 通�
 
 **编码速查：**
 
-| 场景 | 编码要求 |
-|------|----------|
-| PowerShell 7 的 `.ps1` | UTF-8 无 BOM |
-| PowerShell 5.1 的 `.ps1` | UTF-8 带 BOM |
-| `.bat` / `.cmd` | 跟 `chcp` 查到的当前代码页走;用 UTF-8 需无 BOM + 首行 `chcp 65001` |
-| PowerShell 5.1 写 JSON | 无 BOM,用 `[IO.File]::WriteAllText` |
+| 场景                     | 编码要求                                                           |
+| ------------------------ | ------------------------------------------------------------------ |
+| PowerShell 7 的 `.ps1`   | UTF-8 无 BOM                                                       |
+| PowerShell 5.1 的 `.ps1` | UTF-8 带 BOM                                                       |
+| `.bat` / `.cmd`          | 跟 `chcp` 查到的当前代码页走;用 UTF-8 需无 BOM + 首行 `chcp 65001` |
+| PowerShell 5.1 写 JSON   | 无 BOM,用 `[IO.File]::WriteAllText`                                |
 
 **Python 输出乱码：** 报 `UnicodeEncodeError` 时先区分是 stdout,stderr 还是文件写入.确认是标准输出编码不匹配,接收端也按 UTF-8 读取时,在脚本开头加 `sys.stdout.reconfigure(encoding='utf-8')`.标准错误用 `sys.stderr` 对应处理.允许丢字符的展示输出才加 `errors='replace'`,数据输出保留严格报错,replace 会把编不了的字符静默换成 `?`,数据就坏了.
 
@@ -78,9 +78,9 @@ PowerShell 版本差异比较大.现代 Windows 自带的 `powershell.exe` 通�
 
 ## 远程操作
 
-**先确认工具有没有。** Windows 本机远程操作,标准工具箱是 `plink.exe` 和 `pscp.exe`.用之前先确认工具在不在,没有就问用户能不能提供,不要自己找替代或绕路.这是"缺资源红线"在远程场景的具体化.
+Windows 环境下的SSH工具的最优解是 `plink.exe` 和 `pscp.exe`.用之前先确认工具在不在,没有就问用户能不能提供,不要自己找替代或绕路.这是"缺资源红线"在远程场景的具体化.
 
-Linux 本机远程操作 Windows,用系统自带的 `ssh` / `scp`,密码认证配 `sshpass`,密钥认证不需要.putty 工具箱只在 Windows 本机用,Linux 侧不适用.
+如果是 Linux 或者 macOS 远程操作 Windows,用系统自带的 `ssh` / `scp`,密码认证配 `sshpass`,密钥认证不需要.putty 工具箱只在 Windows 本机用,Linux 侧不适用.
 
 **远端 shell 不一定是 cmd。** Windows OpenSSH 服务端初始默认 shell 是 `cmd`,但管理员可以通过 `DefaultShell` 改成 PowerShell 或其它.远端用什么不由 `ssh` 或 `plink` 决定,**执行前先确认远端实际 shell**:
 
