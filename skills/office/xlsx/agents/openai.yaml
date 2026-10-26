@@ -1,0 +1,3 @@
+interface:
+  display_name: "Excel 电子表格处理"
+  short_description: "打开,读取,编辑或创建 .xlsx/.csv 表格:写公式,调格式,做图表,清洗数据,重算校验."

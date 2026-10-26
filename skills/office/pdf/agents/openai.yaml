@@ -1,0 +1,3 @@
+interface:
+  display_name: "PDF 文档处理"
+  short_description: "PDF 全流程处理:文本表格提取,合并拆分,水印加密,表单填写,OCR 识别,从零生成."

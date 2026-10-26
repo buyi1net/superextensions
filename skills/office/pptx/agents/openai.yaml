@@ -1,0 +1,3 @@
+interface:
+  display_name: "PPT 演示文稿处理"
+  short_description: "制作,编辑或解析 .pptx/.potx 演示文稿:模板套用,页面增删,图表校验,渲染导出."
