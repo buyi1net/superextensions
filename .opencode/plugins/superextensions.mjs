@@ -1,9 +1,8 @@
 /**
- * superextensions bootstrap plugin for OpenCode.
+ * superextensions bootstrap plugin for OpenCode 2.
  *
- * The package keeps both entrypoints so OpenCode 1 and OpenCode 2 can load the
- * same published artifact. OpenCode 1 calls `server()`; OpenCode 2 calls
- * `setup(ctx)`.
+ * The plugin registers every nested skill explicitly and injects constitution
+ * into model request context through the V2 plugin API.
  */
 import path from 'path';
 import fs from 'fs';
@@ -79,26 +78,7 @@ const setup = async (ctx) => {
   await ctx.session.hook('generate', injectBootstrap);
 };
 
-// OpenCode 1:保留旧版 config 与 messages.transform 接缝。
-const server = async () => ({
-  config: async (config) => {
-    config.skills = config.skills || {};
-    config.skills.paths = config.skills.paths || [];
-    if (!config.skills.paths.includes(skillsDir)) config.skills.paths.push(skillsDir);
-  },
-  'experimental.chat.messages.transform': async (_input, output) => {
-    const bootstrap = getBootstrap();
-    if (!bootstrap || !output.messages.length) return;
-    const firstUser = output.messages.find((m) => m.info.role === 'user');
-    if (!firstUser || !firstUser.parts.length) return;
-    if (firstUser.parts.some((p) => p.type === 'text' && p.text.includes('全局规则总纲 constitution'))) return;
-    const ref = firstUser.parts[0];
-    firstUser.parts.unshift({ ...ref, type: 'text', text: bootstrap });
-  },
-});
-
 export default {
   id: 'superextensions',
   setup,
-  server,
 };

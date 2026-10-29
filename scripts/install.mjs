@@ -137,8 +137,7 @@ function cleanCodexHook() {
 function installOpencode() {
   log('\n=== OpenCode ===');
   if (!has('opencode')) { log('  跳过：未找到 opencode CLI'); return; }
-  // OpenCode 2 使用 `plugin add/update`；V1 的 `plugin <module> --global --force`
-  // 会把同一数据目录当成旧 schema 读取，当前版本不再调用旧命令。
+  // OpenCode 2 使用 `plugin add/update`，由原生 CLI 管理 Git 插件缓存和全局配置。
   const spec = `git+${GIT_URL}`;
   shLoud(`opencode plugin add "${spec}"`);                 // 幂等：首次安装或确保配置登记
   shLoud(`opencode plugin update "${spec}"`);              // 无版本号 Git 依赖拉取最新公开仓提交
