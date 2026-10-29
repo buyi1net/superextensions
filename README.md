@@ -117,7 +117,10 @@ opencode plugin add 'git+https://github.com/buyi1net/superextensions.git'
 opencode plugin list
 opencode plugin check
 
-# 更新，在 superextensions 仓库目录执行
+# 更新（研发仓根目录）
+node build/scripts/install.mjs --opencode
+
+# 更新（公开仓根目录）
 node scripts/install.mjs --opencode
 
 # 卸载
@@ -146,11 +149,11 @@ node /opt/ZCode/resources/glm/zcode.cjs plugins list --json
 node /opt/ZCode/resources/glm/zcode.cjs skills list --json
 ```
 
-本机若提供 `zcode-cli`，发布流程可以在研发仓执行 `node scripts/install.mjs --zcode` 自动登记、安装或更新，并核对插件启用状态和 30 项 skill；没有该入口时，按上面的桌面市场步骤操作。内嵌 CLI 路径会随 ZCode 版本变化，不写进跨机器自动安装脚本。`.zcode-plugin/plugin.json` 必须显式列出每个叶子 skill 路径，不能只把嵌套的 `skills/` 根目录作为唯一声明。
+本机若提供 `zcode-cli`，发布流程可以在研发仓根目录执行 `node build/scripts/install.mjs --zcode`，或在公开仓根目录执行 `node scripts/install.mjs --zcode`，自动登记、安装或更新，并核对插件启用状态和 30 项 skill；没有该入口时，按上面的桌面市场步骤操作。内嵌 CLI 路径会随 ZCode 版本变化，不写进跨机器自动安装脚本。`.zcode-plugin/plugin.json` 必须显式列出每个叶子 skill 路径，不能只把嵌套的 `skills/` 根目录作为唯一声明。
 
 ## Pi Agent
 
-通过 Pi 原生 Git 包机制安装. Pi 从包清单加载扩展和 skill,并在每次用户提交提示时注入本插件.
+通过 Pi 原生 Git 包机制安装。Pi 从包清单加载扩展和 skill，并在每次用户提交提示时注入本插件。
 
 ```bash
 # 安装

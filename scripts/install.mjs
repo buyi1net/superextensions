@@ -45,6 +45,38 @@ const shLoud = (cmd, opts = {}) => { log('  $ ' + cmd); return execSync(cmd, { s
 const tryQuiet = (cmd) => { try { sh(cmd); return true; } catch { return false; } };
 const has = (bin) => { try { sh(isWin ? `where ${bin}` : `command -v ${bin}`); return true; } catch { return false; } };
 
+function readJsonCommand(command, description, expected) {
+  const output = sh(command);
+  for (let start = 0; start < output.length; start += 1) {
+    if (output[start] !== '[' && output[start] !== '{') continue;
+    const stack = [];
+    let inString = false;
+    let escaped = false;
+    for (let index = start; index < output.length; index += 1) {
+      const char = output[index];
+      if (inString) {
+        if (escaped) escaped = false;
+        else if (char === '\\') escaped = true;
+        else if (char === '"') inString = false;
+        continue;
+      }
+      if (char === '"') { inString = true; continue; }
+      if (char === '{' || char === '[') stack.push(char === '{' ? '}' : ']');
+      else if (char === '}' || char === ']') {
+        if (stack.pop() !== char) break;
+        if (!stack.length) {
+          try {
+            const value = JSON.parse(output.slice(start, index + 1));
+            if (!expected || expected(value)) return value;
+          } catch {}
+          break;
+        }
+      }
+    }
+  }
+  throw new Error(`${description} 没有返回可解析的 JSON`);
+}
+
 // 删目录（可传多个），不存在就跳过。统一安装器会清理目标空目录或异常残留，不触碰其它插件。
 function rmDir(...dirs) {
   for (const d of dirs) { if (fs.existsSync(d)) fs.rmSync(d, { recursive: true, force: true }); }
@@ -150,14 +182,20 @@ function installOpencode() {
 function installZcode() {
   log('\n=== ZCode ===');
   if (!has('zcode-cli')) {
-    log('  跳过：未找到 zcode-cli；请在 ZCode 桌面插件市场刷新并更新');
-    return;
+    log('  待人工处理：未找到 zcode-cli，请在 ZCode 桌面插件市场刷新并更新');
+    return { pending: '未找到 zcode-cli，需在 ZCode 桌面插件市场完成安装或更新' };
   }
   // zcode-cli 是随具体 ZCode 版本提供的可选 CLI 包装入口；不碰内部 cache。
   tryQuiet(`zcode-cli plugins marketplace add ${REPO} --scope user`);
+  const validation = readJsonCommand(
+    `zcode-cli plugins validate "${DELIVERY_ROOT}" --json`,
+    'ZCode 交付物校验',
+    (value) => value && typeof value === 'object' && !Array.isArray(value),
+  );
+  if (validation.ok !== true) throw new Error(`ZCode 交付物校验未通过：${JSON.stringify(validation)}`);
   let installed;
   try {
-    const plugins = JSON.parse(sh('zcode-cli plugins list --json'));
+    const plugins = readJsonCommand('zcode-cli plugins list --json', 'ZCode 插件列表', Array.isArray);
     installed = plugins.find((item) => item.id === `${PLUGIN}@${MARKET}`);
   } catch (error) {
     throw new Error(`无法读取 ZCode 插件列表：${error.message}`);
@@ -169,13 +207,14 @@ function installZcode() {
   }
   let refreshed;
   try {
-    const plugins = JSON.parse(sh('zcode-cli plugins list --json'));
+    const plugins = readJsonCommand('zcode-cli plugins list --json', 'ZCode 插件列表', Array.isArray);
     refreshed = plugins.find((item) => item.id === `${PLUGIN}@${MARKET}`);
   } catch (error) {
     throw new Error(`无法核对 ZCode 插件列表：${error.message}`);
   }
   const expected = JSON.parse(fs.readFileSync(path.join(DELIVERY_ROOT, '.zcode-plugin', 'plugin.json'), 'utf8')).skills.length;
-  if (!refreshed?.enabled) throw new Error('ZCode 插件未处于启用状态');
+  if (!refreshed) throw new Error('ZCode 插件未出现在插件列表中');
+  if (!refreshed.enabled) throw new Error('ZCode 插件未处于启用状态');
   if (refreshed.skillCount !== expected) throw new Error(`ZCode skill 数量不符：期望 ${expected}，实际 ${refreshed.skillCount ?? '(缺失)'}`);
   log(`  ✓ ZCode 已更新并启用；skill 数量 ${refreshed.skillCount}`);
 }
@@ -255,7 +294,8 @@ function uninstallSelected(targets) {
     }
   }
   if (targets.opencode) {
-    // opencode.json 去掉 Git 插件登记
+    // 先调用 OpenCode 原生命令，JSON 配置清理只作为旧登记兜底。
+    if (has('opencode')) tryQuiet(`opencode plugin remove "git+${GIT_URL}"`);
     const ocJson = path.join(HOME, '.config', 'opencode', 'opencode.json');
     if (fs.existsSync(ocJson)) {
       try {
@@ -304,8 +344,12 @@ if (args.includes('--uninstall')) {
   process.exit(0);
 }
 const failures = [];
+const pending = [];
 const runInstaller = (label, install) => {
-  try { install(); }
+  try {
+    const result = install();
+    if (result?.pending) pending.push(`${label}：${result.pending}`);
+  }
   catch (error) {
     failures.push(label);
     log(`  ${label} 出错：${error.message}`);
@@ -319,7 +363,17 @@ if (targets.omp) runInstaller('OMP', installOmp);
 if (targets.zcode) runInstaller('ZCode', installZcode);
 if (failures.length) {
   log(`\n安装失败：${failures.join('、')}`);
+  if (pending.length) {
+    log('\n待人工处理：');
+    for (const item of pending) log(`  - ${item}`);
+  }
   process.exitCode = 1;
 } else {
-  log('\n完成。Claude Code 使用精简 cache；Codex 保留原生完整 cache；OpenCode 使用原生 plugin 注册；OMP 走 marketplace 插件通道；ZCode 优先使用 zcode-cli，缺少该入口时走桌面插件市场。');
+  log('\n完成。Claude Code 使用精简 cache；Codex 保留原生完整 cache；OpenCode 使用原生 plugin 注册；OMP 走 marketplace 插件通道。');
+  if (pending.length) {
+    log('\n待人工处理：');
+    for (const item of pending) log(`  - ${item}`);
+  } else {
+    log('ZCode 已通过 zcode-cli 完成安装或更新。');
+  }
 }
