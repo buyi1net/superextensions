@@ -47,10 +47,6 @@ ${BOOTSTRAP_MARKER}
 
 ${body}
 
-## Pi 适配说明
-
-Pi 没有 Claude Code 的 Skill 工具,也不存在"调用 skill"这个动作:总纲里提到的「modules/X」文件直接用 read 读取;constitution 已注册为 Pi 原生 skill,也可用 /skill:constitution 手动加载。
-
 </EXTREMELY_IMPORTANT>`;
 		return cachedBootstrap;
 	} catch {
