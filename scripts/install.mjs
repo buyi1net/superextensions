@@ -9,7 +9,7 @@
  *   - Claude Code：marketplace add --sparse，装时只拉自己的目录
  *   - Codex：plugin add 会二次完整 clone，不能 sparse（partial clone 缺 blob 会失败），
  *            必须保留原生完整缓存，不能在安装后删除仓库文件
- *   - OpenCode：先失效本插件的 Git 缓存，再调用原生 plugin 命令安装并注册
+ *   - OpenCode 2：原生 plugin add/update；Git 插件由 OpenCode 管理缓存和全局配置
  *   - OMP：marketplace 插件通道（omp plugin marketplace add + install）；不能用 omp install
  *          <git-url>：npm git 依赖通道只扫 skills/ 一级目录，嵌套 skill 会丢
  *   - ZCode Desktop：插件市场由 UI 管理，不能在无界面安装器里直接改内部 cache；发布后的更新走 UI 检查点。
@@ -137,22 +137,12 @@ function cleanCodexHook() {
 function installOpencode() {
   log('\n=== OpenCode ===');
   if (!has('opencode')) { log('  跳过：未找到 opencode CLI'); return; }
-  const spec = `${PLUGIN}@git+${GIT_URL}`;
-  const removed = rmOpencodeCache();
-  if (removed) log(`  ✓ 已失效 OpenCode 旧缓存包（${removed}）`);
-  shLoud(`opencode plugin "${spec}" --global --force`);
-  log('  ✓ OpenCode 已通过原生 plugin 命令安装并写入全局配置');
-}
-
-// 删 opencode 缓存包（整个 superextensions@git... 目录），让 opencode 下次运行从 github 重拉最新。
-// 更新时必需：bun 缓存钉版本，不删旧包就一直用旧 commit。
-function rmOpencodeCache() {
-  const base = path.join(HOME, '.cache', 'opencode', 'packages');
-  if (!fs.existsSync(base)) return null;
-  const pkgs = fs.readdirSync(base).filter(d => d.startsWith(`${PLUGIN}@git`));
-  if (!pkgs.length) return null;
-  for (const p of pkgs) fs.rmSync(path.join(base, p), { recursive: true, force: true });
-  return pkgs.join(', ');
+  // OpenCode 2 使用 `plugin add/update`；V1 的 `plugin <module> --global --force`
+  // 会把同一数据目录当成旧 schema 读取，当前版本不再调用旧命令。
+  const spec = `git+${GIT_URL}`;
+  shLoud(`opencode plugin add "${spec}"`);                 // 幂等：首次安装或确保配置登记
+  shLoud(`opencode plugin update "${spec}"`);              // 无版本号 Git 依赖拉取最新公开仓提交
+  log('  ✓ OpenCode 2 已通过原生 plugin add/update 安装并写入全局配置');
 }
 
 // ---------- OMP (Oh My Pi) ----------
@@ -231,13 +221,18 @@ function uninstallSelected(targets) {
     }
   }
   if (targets.opencode) {
-    // opencode.json 去掉 spec
+    // opencode.json 去掉 Git 插件登记
     const ocJson = path.join(HOME, '.config', 'opencode', 'opencode.json');
     if (fs.existsSync(ocJson)) {
       try {
         const cfg = JSON.parse(fs.readFileSync(ocJson, 'utf8'));
+        if (Array.isArray(cfg.plugins)) {
+          cfg.plugins = cfg.plugins.filter(p => p !== `git+${GIT_URL}`);
+          fs.writeFileSync(ocJson, JSON.stringify(cfg, null, 2));
+        }
+        // 兼容旧版 V1 配置，避免升级后留下同一插件的旧登记。
         if (Array.isArray(cfg.plugin)) {
-          cfg.plugin = cfg.plugin.filter(p => !(typeof p === 'string' && p.startsWith(`${PLUGIN}@git+`)));
+          cfg.plugin = cfg.plugin.filter(p => !(typeof p === 'string' && (p === `git+${GIT_URL}` || p.startsWith(`${PLUGIN}@git+`))));
           fs.writeFileSync(ocJson, JSON.stringify(cfg, null, 2));
         }
       } catch {}
