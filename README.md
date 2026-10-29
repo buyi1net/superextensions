@@ -107,7 +107,7 @@ codex plugin marketplace remove superextensions
 
 ## OpenCode
 
-通过 OpenCode 2 原生插件命令安装。插件使用 V2 的 `setup()` 入口：它会把包内每个 `skills/**/SKILL.md` 显式注册到 skill 域，并在模型请求上下文中注入 constitution。
+通过 OpenCode 原生插件命令安装。插件使用 `setup()` 入口：它会把包内每个 `skills/**/SKILL.md` 显式注册到 skill 域，并在模型请求上下文中注入 constitution。
 
 ```bash
 # 安装或登记（Git 依赖格式）
@@ -124,7 +124,7 @@ node scripts/install.mjs --opencode
 opencode plugin remove 'git+https://github.com/buyi1net/superextensions.git'
 ```
 
-更新脚本调用 OpenCode 2 的 `plugin add`（幂等登记）和 `plugin update`（拉取无版本号 Git 依赖的最新提交）。不要使用旧版的 `opencode plugin "..." --global --force` 形式；它会把 OpenCode 2 的数据库当成旧 schema 读取并报错。安装、更新或卸载后重新启动 OpenCode，确认 `opencode plugin list` 能列出插件，且 skill 列表中包含本仓提供的 skill。
+更新脚本调用 OpenCode 的 `plugin add`（幂等登记）和 `plugin update`（拉取无版本号 Git 依赖的最新提交）。不要使用旧版的 `opencode plugin "..." --global --force` 形式；它会把当前数据库当成旧 schema 读取并报错。安装、更新或卸载后重新启动 OpenCode，确认 `opencode plugin list` 能列出插件，且 skill 列表中包含本仓提供的 skill。
 
 ## ZCode
 

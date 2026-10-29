@@ -9,7 +9,7 @@
  *   - Claude Code：marketplace add --sparse，装时只拉自己的目录
  *   - Codex：plugin add 会二次完整 clone，不能 sparse（partial clone 缺 blob 会失败），
  *            必须保留原生完整缓存，不能在安装后删除仓库文件
- *   - OpenCode 2：原生 plugin add/update；Git 插件由 OpenCode 管理缓存和全局配置
+ *   - OpenCode：原生 plugin add/update；Git 插件由 OpenCode 管理缓存和全局配置
  *   - OMP：marketplace 插件通道（omp plugin marketplace add + install）；不能用 omp install
  *          <git-url>：npm git 依赖通道只扫 skills/ 一级目录，嵌套 skill 会丢
  *   - ZCode：优先使用 `zcode-cli` 的 marketplace/install/update 命令，并核对 enabled 与 skillCount；没有该版本入口时回退到桌面插件市场。
@@ -139,11 +139,11 @@ function cleanCodexHook() {
 function installOpencode() {
   log('\n=== OpenCode ===');
   if (!has('opencode')) { log('  跳过：未找到 opencode CLI'); return; }
-  // OpenCode 2 使用 `plugin add/update`，由原生 CLI 管理 Git 插件缓存和全局配置。
+  // OpenCode 使用 `plugin add/update`，由原生 CLI 管理 Git 插件缓存和全局配置。
   const spec = `git+${GIT_URL}`;
   shLoud(`opencode plugin add "${spec}"`);                 // 幂等：首次安装或确保配置登记
   shLoud(`opencode plugin update "${spec}"`);              // 无版本号 Git 依赖拉取最新公开仓提交
-  log('  ✓ OpenCode 2 已通过原生 plugin add/update 安装并写入全局配置');
+  log('  ✓ OpenCode 已通过原生 plugin add/update 安装并写入全局配置');
 }
 
 // ---------- ZCode ----------
