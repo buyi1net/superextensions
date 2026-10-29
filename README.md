@@ -126,9 +126,23 @@ node scripts/install.mjs --opencode
 
 OpenCode 尚无插件更新和卸载命令。更新脚本会失效本插件的 Git 缓存后重新调用原生安装命令；安装、更新或卸载后重新启动 OpenCode，验证输出中应包含本仓提供的 skill。
 
+## ZCode
+
+ZCode Desktop 的插件市场由 ZCode 界面管理。当前版本不要把 `zcode plugins ...` 当作无界面安装命令，也不要直接修改 `~/.zcode/cli/plugins/cache/` 或其它内部注册文件。
+
+安装或更新流程：
+
+1. 打开 ZCode → 插件市场 / Plugin Marketplace。
+2. 添加公开市场 `buyi1net/superextensions`，或刷新已经登记的 superextensions 市场源。
+3. 在“个人 / Personal”中找到 superextensions，执行安装或更新。
+4. 确认插件处于启用状态，并核对 skill 数量与当前 `.zcode-plugin/plugin.json` 的显式清单一致。
+5. 新建任务，确认 skill 在选择器或 skill 列表中可见。
+
+ZCode 的安装、更新和试用依赖桌面端操作；发布后的本机更新流程会把这一步列为人工检查点.
+
 ## Pi Agent
 
-通过 Pi 原生 Git 包机制安装。Pi 从包清单加载扩展和 skill，并在每次用户提交提示时注入本插件。
+通过 Pi 原生 Git 包机制安装. Pi 从包清单加载扩展和 skill,并在每次用户提交提示时注入本插件.
 
 ```bash
 # 安装

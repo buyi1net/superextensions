@@ -3,6 +3,7 @@
  * superextensions 跨 agent 一键安装器（跨平台：Windows / macOS / Linux）
  *
  * 把 superextensions plugin（规则总纲 constitution + 配套 skill）装到 Claude Code / Codex / OpenCode / OMP。
+ * ZCode Desktop 的插件市场由界面管理，不在这个无界面安装器里直接改内部 cache；发布后的 ZCode 更新按 build/README.md 的 UI 流程执行。
  * Pi 不归这里管：Pi 有原生包机制，用 `pi install git:github.com/buyi1net/superextensions`（README「分家手动」）。
  * 各家的安装策略：
  *   - Claude Code：marketplace add --sparse，装时只拉自己的目录
@@ -11,9 +12,10 @@
  *   - OpenCode：先失效本插件的 Git 缓存，再调用原生 plugin 命令安装并注册
  *   - OMP：marketplace 插件通道（omp plugin marketplace add + install）；不能用 omp install
  *          <git-url>：npm git 依赖通道只扫 skills/ 一级目录，嵌套 skill 会丢
+ *   - ZCode Desktop：插件市场由 UI 管理，不能在无界面安装器里直接改内部 cache；发布后的更新走 UI 检查点。
  *
  * 用法：
- *   node install.mjs                装四家
+ *   node install.mjs                装四家（ZCode 走桌面插件市场）
  *   node install.mjs --cc|--codex|--opencode|--omp   只装指定家（可组合）
  *   node install.mjs --uninstall    四家卸载（Pi 用 pi remove，不归这里）
  *   node install.mjs --codex --uninstall       只卸载 Codex（其它目标同理）
@@ -283,5 +285,5 @@ if (failures.length) {
   log(`\n安装失败：${failures.join('、')}`);
   process.exitCode = 1;
 } else {
-  log('\n完成。Claude Code 使用精简 cache；Codex 保留原生完整 cache；OpenCode 使用原生 plugin 注册；OMP 走 marketplace 插件通道。');
+  log('\n完成。Claude Code 使用精简 cache；Codex 保留原生完整 cache；OpenCode 使用原生 plugin 注册；OMP 走 marketplace 插件通道；ZCode 通过桌面插件市场刷新并更新。');
 }
