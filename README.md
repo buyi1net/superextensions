@@ -42,7 +42,7 @@ SuperExtensions 是一款面向 Claude Code、Codex、OpenCode、Pi、OMP (Oh My
 
 | Skill | 用途 |
 |---|---|
-| [`clsup`](./skills/productivity/clsup/SKILL.md) | 任务结束收尾清理，排查并清理日常任务或开发过程中产生的临时垃圾文件。 |
+| [`clssession`](./skills/productivity/clssession/SKILL.md) | 任务结束收尾清理，排查并清理运行、调研与操作过程中产生的临时垃圾文件。 |
 | [`grilling`](./skills/productivity/grilling/SKILL.md) | 在开放式需求中逐层追问决策点和边界，打磨方案。 |
 | [`handoff`](./skills/productivity/handoff/SKILL.md) | 在切换 Agent 或主动交接时生成可继续执行的工作快照。 |
 | [`management`](./skills/productivity/management/SKILL.md) | 项目管理制度，涉及文件或目录操作前的强制入口。 |
