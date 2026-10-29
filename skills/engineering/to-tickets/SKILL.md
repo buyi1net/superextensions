@@ -89,7 +89,7 @@ disable-model-invocation: true
 
 **依赖：** 写明必须先完成的工单编号和标题,或"无(可直接开始)".
 
-**技能：** 比如 用 Skill 工具分别加载`implement` 和 `codebase-design`("用 Skill 工具分别加载"前缀是为了提升Skill的加载率)，也可以写成"无"或"无额外技能需求".
+**技能：** 用 Skill 工具分别加载`implement` 和 `codebase-design`("用 Skill 工具分别加载"前缀是为了提升Skill的加载率,这个前缀不能丢)，也可以写成"无"或"无额外技能需求".
 
 **状态：** 未开始
 
