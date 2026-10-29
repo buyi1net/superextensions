@@ -24,6 +24,7 @@ SuperExtensions 是一款面向 Claude Code、Codex、OpenCode、Pi、OMP (Oh My
 | [`implement`](./skills/engineering/implement/SKILL.md) | 按规格说明、工单或直接任务实现代码。 |
 | [`implement-spec`](./skills/engineering/implement-spec/SKILL.md) | 按工单图调度 worktree 并发或串行推进代码实现直至交付。 |
 | [`prototype`](./skills/engineering/prototype/SKILL.md) | 用一次性原型回答设计问题：验证状态模型或对比界面方案。 |
+| [`retro`](./skills/engineering/retro/SKILL.md) | 复盘一次编码会话，按严重度排序改进项，优化工作环境。 |
 | [`tdd`](./skills/engineering/tdd/SKILL.md) | 测试驱动开发循环与测试规范。 |
 | [`to-spec`](./skills/engineering/to-spec/SKILL.md) | 把当前对话的讨论与决策整理成规格说明并发布到项目跟踪。 |
 | [`to-tickets`](./skills/engineering/to-tickets/SKILL.md) | 把计划、规格说明或对话拆成追踪弹式工单。 |

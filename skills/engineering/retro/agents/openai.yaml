@@ -1,0 +1,5 @@
+interface:
+  display_name: "会话复盘"
+  short_description: "复盘一次编码会话,找出改进项并优化工作环境."
+policy:
+  allow_implicit_invocation: false
