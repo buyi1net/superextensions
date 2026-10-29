@@ -2,8 +2,8 @@
 /**
  * superextensions 跨 agent 一键安装器（跨平台：Windows / macOS / Linux）
  *
- * 把 superextensions plugin（规则总纲 constitution + 配套 skill）装到 Claude Code / Codex / OpenCode / OMP。
- * ZCode Desktop 的插件市场由界面管理，不在这个无界面安装器里直接改内部 cache；发布后的 ZCode 更新按 build/README.md 的 UI 流程执行。
+ * 把 superextensions plugin（规则总纲 constitution + 配套 skill）装到 Claude Code / Codex / OpenCode / OMP / ZCode。
+ * ZCode Desktop 的插件市场负责普通 UI 安装；本机若提供 `zcode-cli`，安装器会走其公开插件命令完成登记、安装或更新；没有该入口时保留 UI 检查点。
  * Pi 不归这里管：Pi 有原生包机制，用 `pi install git:github.com/buyi1net/superextensions`（README「分家手动」）。
  * 各家的安装策略：
  *   - Claude Code：marketplace add --sparse，装时只拉自己的目录
@@ -12,18 +12,19 @@
  *   - OpenCode 2：原生 plugin add/update；Git 插件由 OpenCode 管理缓存和全局配置
  *   - OMP：marketplace 插件通道（omp plugin marketplace add + install）；不能用 omp install
  *          <git-url>：npm git 依赖通道只扫 skills/ 一级目录，嵌套 skill 会丢
- *   - ZCode Desktop：插件市场由 UI 管理，不能在无界面安装器里直接改内部 cache；发布后的更新走 UI 检查点。
+ *   - ZCode：优先使用 `zcode-cli` 的 marketplace/install/update 命令，并核对 enabled 与 skillCount；没有该版本入口时回退到桌面插件市场。
  *
  * 用法：
- *   node install.mjs                装四家（ZCode 走桌面插件市场）
- *   node install.mjs --cc|--codex|--opencode|--omp   只装指定家（可组合）
- *   node install.mjs --uninstall    四家卸载（Pi 用 pi remove，不归这里）
+ *   node install.mjs                装五家（ZCode 无 zcode-cli 时走桌面插件市场）
+ *   node install.mjs --cc|--codex|--opencode|--omp|--zcode   只装指定家（可组合）
+ *   node install.mjs --uninstall    五家卸载（Pi 用 pi remove，不归这里）
  *   node install.mjs --codex --uninstall       只卸载 Codex（其它目标同理）
  */
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const REPO = 'buyi1net/superextensions';
 const GIT_URL = 'https://github.com/buyi1net/superextensions.git';
@@ -31,6 +32,7 @@ const MARKET = 'superextensions';
 const PLUGIN = 'superextensions';
 const HOME = os.homedir();
 const isWin = os.platform() === 'win32';
+const DELIVERY_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 // Claude Code sparse 只拉这几个目录（.claude-plugin 里同时含 marketplace.json + plugin.json）
 const CC_SPARSE = ['.claude-plugin', 'hooks', 'skills'];
@@ -144,7 +146,40 @@ function installOpencode() {
   log('  ✓ OpenCode 2 已通过原生 plugin add/update 安装并写入全局配置');
 }
 
-// ---------- OMP (Oh My Pi) ----------
+// ---------- ZCode ----------
+function installZcode() {
+  log('\n=== ZCode ===');
+  if (!has('zcode-cli')) {
+    log('  跳过：未找到 zcode-cli；请在 ZCode 桌面插件市场刷新并更新');
+    return;
+  }
+  // zcode-cli 是随具体 ZCode 版本提供的可选 CLI 包装入口；不碰内部 cache。
+  tryQuiet(`zcode-cli plugins marketplace add ${REPO} --scope user`);
+  let installed;
+  try {
+    const plugins = JSON.parse(sh('zcode-cli plugins list --json'));
+    installed = plugins.find((item) => item.id === `${PLUGIN}@${MARKET}`);
+  } catch (error) {
+    throw new Error(`无法读取 ZCode 插件列表：${error.message}`);
+  }
+  if (installed) {
+    shLoud(`zcode-cli plugins update ${PLUGIN}@${MARKET}`);
+  } else {
+    shLoud(`zcode-cli plugins install ${PLUGIN}@${MARKET} -s user`);
+  }
+  let refreshed;
+  try {
+    const plugins = JSON.parse(sh('zcode-cli plugins list --json'));
+    refreshed = plugins.find((item) => item.id === `${PLUGIN}@${MARKET}`);
+  } catch (error) {
+    throw new Error(`无法核对 ZCode 插件列表：${error.message}`);
+  }
+  const expected = JSON.parse(fs.readFileSync(path.join(DELIVERY_ROOT, '.zcode-plugin', 'plugin.json'), 'utf8')).skills.length;
+  if (!refreshed?.enabled) throw new Error('ZCode 插件未处于启用状态');
+  if (refreshed.skillCount !== expected) throw new Error(`ZCode skill 数量不符：期望 ${expected}，实际 ${refreshed.skillCount ?? '(缺失)'}`);
+  log(`  ✓ ZCode 已更新并启用；skill 数量 ${refreshed.skillCount}`);
+}
+
 // omp 走 marketplace 插件通道：omp plugin marketplace add 会 git clone 本仓，omp plugin install
 // 登记进 ~/.omp/plugins/installed_plugins.json 并把 node_modules/superextensions 软链到版本化缓存。
 // 不能用 omp install <git-url>：那是 npm git 依赖通道，omp 对它只扫 skills/ 一级目录，
@@ -238,6 +273,11 @@ function uninstallSelected(targets) {
     }
     log('  OpenCode 已从 opencode.json 移除');
   }
+  if (targets.zcode && has('zcode-cli')) {
+    tryQuiet(`zcode-cli plugins uninstall ${PLUGIN}@${MARKET} -s user`);
+    tryQuiet(`zcode-cli plugins marketplace remove ${MARKET} --scope user`);
+    log('  ZCode 已卸');
+  }
   if (targets.omp && has('omp')) {
     tryQuiet(`omp plugin uninstall ${PLUGIN}@${MARKET}`);
     tryQuiet(`omp plugin marketplace remove ${MARKET}`);
@@ -250,12 +290,13 @@ function uninstallSelected(targets) {
 
 // ---------- main ----------
 const args = process.argv.slice(2);
-const all = !args.some(a => ['--cc', '--codex', '--opencode', '--omp'].includes(a));
+const all = !args.some(a => ['--cc', '--codex', '--opencode', '--omp', '--zcode'].includes(a));
 const targets = {
   cc: all || args.includes('--cc'),
   codex: all || args.includes('--codex'),
   opencode: all || args.includes('--opencode'),
   omp: all || args.includes('--omp'),
+  zcode: all || args.includes('--zcode'),
 };
 if (args.includes('--uninstall')) {
   uninstallSelected(targets);
@@ -275,9 +316,10 @@ if (targets.cc) runInstaller('Claude Code', installCC);
 if (targets.codex) runInstaller('Codex', installCodex);
 if (targets.opencode) runInstaller('OpenCode', installOpencode);
 if (targets.omp) runInstaller('OMP', installOmp);
+if (targets.zcode) runInstaller('ZCode', installZcode);
 if (failures.length) {
   log(`\n安装失败：${failures.join('、')}`);
   process.exitCode = 1;
 } else {
-  log('\n完成。Claude Code 使用精简 cache；Codex 保留原生完整 cache；OpenCode 使用原生 plugin 注册；OMP 走 marketplace 插件通道；ZCode 通过桌面插件市场刷新并更新。');
+  log('\n完成。Claude Code 使用精简 cache；Codex 保留原生完整 cache；OpenCode 使用原生 plugin 注册；OMP 走 marketplace 插件通道；ZCode 优先使用 zcode-cli，缺少该入口时走桌面插件市场。');
 }

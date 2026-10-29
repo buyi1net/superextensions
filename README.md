@@ -146,7 +146,7 @@ node /opt/ZCode/resources/glm/zcode.cjs plugins list --json
 node /opt/ZCode/resources/glm/zcode.cjs skills list --json
 ```
 
-内嵌 CLI 路径会随 ZCode 版本变化，不写进跨机器自动安装脚本；发布后的安装和更新仍以桌面插件市场为准。`.zcode-plugin/plugin.json` 必须显式列出每个叶子 skill 路径，不能只把嵌套的 `skills/` 根目录作为唯一声明。
+本机若提供 `zcode-cli`，发布流程可以在研发仓执行 `node scripts/install.mjs --zcode` 自动登记、安装或更新，并核对插件启用状态和 30 项 skill；没有该入口时，按上面的桌面市场步骤操作。内嵌 CLI 路径会随 ZCode 版本变化，不写进跨机器自动安装脚本。`.zcode-plugin/plugin.json` 必须显式列出每个叶子 skill 路径，不能只把嵌套的 `skills/` 根目录作为唯一声明。
 
 ## Pi Agent
 
