@@ -128,7 +128,7 @@ opencode plugin remove 'git+https://github.com/buyi1net/superextensions.git'
 
 ## ZCode
 
-ZCode Desktop 的插件市场由 ZCode 界面管理。当前版本不要把 `zcode plugins ...` 当作无界面安装命令，也不要直接修改 `~/.zcode/cli/plugins/cache/` 或其它内部注册文件。
+ZCode Desktop 的插件市场负责普通用户的安装和更新。当前 ZCode Linux 的 `/usr/bin/zcode` 是 Electron 启动器，直接执行 `zcode plugins ...` 不会稳定输出 CLI JSON；不要直接修改 `~/.zcode/cli/plugins/cache/` 或其它内部注册文件。
 
 安装或更新流程：
 
@@ -138,7 +138,15 @@ ZCode Desktop 的插件市场由 ZCode 界面管理。当前版本不要把 `zco
 4. 确认插件处于启用状态，并核对 skill 数量与当前 `.zcode-plugin/plugin.json` 的显式清单一致。
 5. 新建任务，确认 skill 在选择器或 skill 列表中可见。
 
-ZCode 的安装、更新和试用依赖桌面端操作；发布后的本机更新流程会把这一步列为人工检查点.
+本机安装包如果提供内嵌 CLI，可用版本相关的只读命令校验交付物，例如：
+
+```bash
+node /opt/ZCode/resources/glm/zcode.cjs plugins validate build --json
+node /opt/ZCode/resources/glm/zcode.cjs plugins list --json
+node /opt/ZCode/resources/glm/zcode.cjs skills list --json
+```
+
+内嵌 CLI 路径会随 ZCode 版本变化，不写进跨机器自动安装脚本；发布后的安装和更新仍以桌面插件市场为准。`.zcode-plugin/plugin.json` 必须显式列出每个叶子 skill 路径，不能只把嵌套的 `skills/` 根目录作为唯一声明。
 
 ## Pi Agent
 
