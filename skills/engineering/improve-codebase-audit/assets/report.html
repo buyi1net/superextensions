@@ -327,7 +327,7 @@
           if (!/^A\d{2,}$/.test(candidate.id) || ids.has(candidate.id)) fail(at + ".id（须唯一，格式如 A01）");
           ids.add(candidate.id);
           if (!priorities[candidate.priority]) fail(at + ".priority（严重程度）");
-          if (typeof candidate.criterion !== "string" || !["组织与体量", "重复与复用", "死代码与遗留", "测试与工程入口", "声明与规则漂移", "命名与注释"].some(name => candidate.criterion === name || candidate.criterion.startsWith(name + " ·"))) fail(at + ".criterion（判据须为六短名之一，可接「·」具体化）");
+          if (typeof candidate.criterion !== "string" || !["组织与体量", "重复与复用", "死代码与遗留", "测试与工程入口", "声明与规则漂移", "命名与文字注释"].some(name => candidate.criterion === name || candidate.criterion.startsWith(name + " ·"))) fail(at + ".criterion（判据须为六短名之一，可接「·」具体化）");
           for (const field of ["subsystem", "title", "problem", "proposal", "reason", "impact"]) {
             if (typeof candidate[field] !== "string" || !candidate[field].trim()) fail(at + "." + field);
           }
