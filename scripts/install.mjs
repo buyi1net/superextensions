@@ -174,7 +174,7 @@ function installOpencode() {
   // OpenCode 使用 `plugin add/update`，由原生 CLI 管理 Git 插件缓存和全局配置。
   const spec = `git+${GIT_URL}`;
   shLoud(`opencode plugin add "${spec}"`);                 // 幂等：首次安装或确保配置登记
-  shLoud(`opencode plugin update "${spec}"`);              // 无版本号 Git 依赖拉取最新公开仓提交
+  shLoud(`opencode plugin update`);                        // 拉取最新公开仓提交
   log('  ✓ OpenCode 已通过原生 plugin add/update 安装并写入全局配置');
 }
 
