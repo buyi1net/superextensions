@@ -1,6 +1,6 @@
-# 英中术语表
+# 中英术语表
 
-> express-translate(原 chinese-express)的术语表.以下术语按稳定译法翻译,不轮换同义词;表中没有的术语,按语境定含义.
+> 写作系列中英术语对照表.以下术语按稳定译法使用,不轮换同义词;表中没有的术语,按语境定含义.
 
 ### AI与技术
 
@@ -19,14 +19,14 @@
 | guardrails                     | 护栏                                            |
 | hallucination                  | 幻觉                                            |
 | harness                        | 运行环境                                        |
-| inference                      | 推理                                            |
-| leading word                   | 关键词(首次出现时保留英文)                    |
+| inference                      | 推理(模型推理语境)                             |
+| leading word                   | 引导词(首次出现时保留英文)                    |
 | latent space                   | 潜空间                                          |
 | prompt                         | 提示词                                          |
 | prompt engineering             | 提示工程                                        |
 | prompt injection               | 提示注入                                        |
-| progressive disclosure         | 按需展开                                        |
-| reasoning                      | 推理                                            |
+| progressive disclosure         | 渐进式披露                                      |
+| reasoning                      | 推理(思维与思考语境)                           |
 | retrieval-augmented generation | 检索增强生成                                    |
 | RLHF                           | 基于人类反馈的强化学习                          |
 | seam                           | 接缝                                            |

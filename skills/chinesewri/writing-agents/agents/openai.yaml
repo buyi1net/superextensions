@@ -1,0 +1,3 @@
+interface:
+  display_name: "给Agent写文档"
+  short_description: "给AI读文档的写作标准:指针精确,层级清晰,完成标准明确"

@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 ## 执行步骤
 
-1. 用 Skill 工具加载 `express-agents`，参考给 Agent 写文档的规范。
+1. 用 Skill 工具加载 `writing-agents`，参考给 Agent 写文档的规范。
 
 2. 读取用户指定会话的原始记录（必要时翻一下本地日志）。用户没特别指定的话，直接复盘当前这场。
 
@@ -41,4 +41,4 @@ disable-model-invocation: true
 - `CLAUDE.md` / `AGENTS.md`：只要 Agent 在这个仓库干活，就会一直加载这些文件。所以里面能不写就不写，尽量只留指向其他文件的上下文指针。
 - `CODING_STANDARDS.md`：这份文件只在审查代码时读，写代码时不读。如果规范超过 1000 行，就把具体规则拆到单独的文档里，这里只留指针。
 - 文档文件（Docs）：作为补充参考资料，通过其他文件指过来。写新文档前，先看看项目里是不是已经有了。
-- Skill：用来放那些按需加载的参考材料（其 description 会进入上下文充当指针），或者作为用户直接调用的命令。写法按 `express-agents` 的规范来。
+- Skill：用来放那些按需加载的参考材料（其 description 会进入上下文充当指针），或者作为用户直接调用的命令。写法按 `writing-agents` 的规范来。

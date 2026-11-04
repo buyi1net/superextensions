@@ -235,13 +235,17 @@ description: Agent 的全局规则总纲.任何会话,任何任务开始前都�
 
 触发条件:新建,移动,重命名,删除文件或目录,或判断内容归属,建立分类目录前,用 Skill 工具加载 `management`.
 
-### 给人写作
+### 核心文风
 
-触发条件:写或改 README,报告,说明,commit,周报这类给人读的文档时,用 Skill 工具加载 `express-writing`.
+触发条件:产出任何书面内容(文档,报告,说明,README,commit,周报,skill,规则)时,用 Skill 工具加载 `writing-style`.
 
 ### Agent
 
-触发条件:写或改 skill,`AGENTS.md`,`CLAUDE.md`,给 Agent 的提示词这类给 Agent 读的文档时,用 Skill 工具加载 `express-agents`.
+触发条件:写或改 skill,`AGENTS.md`,`CLAUDE.md`,给 Agent 的提示词这类给 Agent 读的文档时,用 Skill 工具加载 `writing-agents`.
+
+### 交稿质检
+
+触发条件:用户要求审查,验收或冷读一份成稿时,用 Skill 工具加载 `writing-check`.
 
 ### 重新解释
 

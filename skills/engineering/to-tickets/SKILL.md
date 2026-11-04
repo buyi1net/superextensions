@@ -126,4 +126,4 @@ disable-model-invocation: true
 
 ### 第七步:指令审查
 
-用 Skill 工具加载 `express-agents` 做指令审查。
+用 Skill 工具加载 `writing-check` 做指令审查。

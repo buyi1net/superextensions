@@ -30,14 +30,13 @@ SuperExtensions 是一款面向 Claude Code、Codex、OpenCode、Pi、OMP (Oh My
 | [`to-tickets`](./skills/engineering/to-tickets/SKILL.md) | 把计划、规格说明或对话拆成追踪弹式工单。 |
 | [`wizard`](./skills/engineering/wizard/SKILL.md) | 生成 bash 向导脚本，一步步带用户做完只有人类才能完成的操作流程。 |
 
-表达（expression）：
+中文写作（chinesewri）：
 
 | Skill | 用途 |
 |---|---|
-| [`express-agents`](./skills/expression/express-agents/SKILL.md) | 给 AI 写文档的指南，创建或修改 skill、AGENTS.md 时使用。 |
-| [`express-check`](./skills/expression/express-check/SKILL.md) | 中文成稿交稿前的检测站：自查改稿，新写和大改的稿件交稿前过子代理冷读终审。 |
-| [`express-translate`](./skills/expression/express-translate/SKILL.md) | 中英互译与软件汉化的语言标准：术语统一、力度保真、占位符保留。 |
-| [`express-writing`](./skills/expression/express-writing/SKILL.md) | 给人写文档的写前标准：范文对齐、无歧义、一段一事。 |
+| [`writing-style`](./skills/chinesewri/writing-style/SKILL.md) | 中文书面文风基准：语感平实自然、一段一事、无歧义优先、术语统一，含给人写文档与指令文档的范文。 |
+| [`writing-agents`](./skills/chinesewri/writing-agents/SKILL.md) | 给 AI 读文档的指南，创建或修改 skill、AGENTS.md、spec 与工单时使用。 |
+| [`writing-check`](./skills/chinesewri/writing-check/SKILL.md) | 中文成稿交稿前的独立质检：内容保真与文风语感双线审查、自查改稿与冷读终审。 |
 
 通用（productivity）：
 
