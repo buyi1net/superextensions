@@ -9,6 +9,8 @@ description: 给 AI 读文档的写作标准.写或改 skill,`AGENTS.md`,提示�
 
 写 skill 另有一套机制规范:frontmatter 怎么填,调用方式怎么选,路由 skill 怎么用.这些单独放 [`SKILL-MECHANICS.md`](./modules/SKILL-MECHANICS.md) 里讲.
 
+新建,修改或退役 `AGENTS.md`,或者要判断某个目录该不该建入口文件,先读 [入口规则](./modules/AGENTS-ENTRY.md):入口建在哪一层,写什么不写什么,已有的 `CLAUDE.md` 怎么处理.
+
 ## 常驻与按需
 
 给 AI 读的文档分两类,读者一样,计费与加载方式不同:

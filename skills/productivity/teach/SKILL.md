@@ -20,7 +20,7 @@ disable-model-invocation: true
 - `./assets/*`:跨课程复用的**模块**.详见下方 模块 一节.
 - `NOTES.md`:随手记,用来记下学生的偏好或临时工作笔记.
 
-工作区在项目里的落位和登记,跟项目管理制度走.
+工作区在项目里的落位按 project-layout;入口登记按 writing-agents 的入口规则.
 
 ## 哲学
 

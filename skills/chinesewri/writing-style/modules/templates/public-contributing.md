@@ -1,6 +1,6 @@
 # 贡献指南
 
-> 本模板是公开仓库根目录 `CONTRIBUTING.md` 的标准底稿,与 [public-agents.md](./public-agents.md)(AGENTS.md 底稿)配套:
+> 本模板是公开仓库根目录 `CONTRIBUTING.md` 的标准底稿,与 [public-agents.md](../../../writing-agents/modules/templates/public-agents.md)(AGENTS.md 底稿)配套:
 > AGENTS.md 管「自动化 bot 和贡献者的操作规则」,CONTRIBUTING.md 管「人类贡献者的参与门槛和流程」.
 > 使用方式:文件复制本模板,删除不适用的章节,替换尖括号占位为项目实际内容.小项目或没有外部贡献预期的仓库不需要本文件.
 

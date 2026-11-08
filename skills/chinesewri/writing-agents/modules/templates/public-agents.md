@@ -68,7 +68,7 @@ rebase 冲突:
 
 ## Issue 与 PR
 
-<贡献者门槛与质量标准见 CONTRIBUTING.md(落地时替换为真实链接;其底稿为 [public-contributing.md](./public-contributing.md),与本文配套);项目不设贡献门槛时删除本行.>
+<贡献者门槛与质量标准见 CONTRIBUTING.md(落地时替换为真实链接;其底稿为 [public-contributing.md](../../../writing-style/modules/templates/public-contributing.md),与本文配套);项目不设贡献门槛时删除本行.>
 
 审查 PR:
 

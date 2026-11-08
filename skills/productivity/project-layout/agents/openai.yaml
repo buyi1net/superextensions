@@ -1,0 +1,3 @@
+interface:
+  display_name: "目录归属"
+  short_description: "新建文件和目录时决定放哪,用常用目录表和几条规则防止项目被建乱"

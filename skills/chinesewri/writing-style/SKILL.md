@@ -3,9 +3,11 @@ name: writing-style
 description: 中文书面文风基准:语感平实自然,一段一事,无歧义优先,排版与范文.产出任何书面内容前必须加载.
 ---
 
-只要产出书面内容(文档,报告,说明,README,commit,周报,skill,规则),就必须加载本 skill.日常聊天交流,纯代码实现,即时答疑不走本 skill.涉及文件或目录的新建,移动,归档,删除,走 [management](../../productivity/management/SKILL.md).
+只要产出书面内容(文档,报告,说明,README,commit,周报,skill,规则),就必须加载本 skill.日常聊天交流,纯代码实现,即时答疑不走本 skill.新建文件或目录且看不出该放哪,或者移动,重命名,删除文件和目录时,走 [project-layout](../../productivity/project-layout/SKILL.md).
 
 给 Agent 读的文档另加载 [writing-agents](../writing-agents/SKILL.md).
+
+写或改 `README.md` 时,先读 [README 规则](./modules/readmes.md):按读者和位置判定形态,再复制对应骨架.
 
 ## 写前四件事
 

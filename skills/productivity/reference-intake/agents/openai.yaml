@@ -1,0 +1,3 @@
+interface:
+  display_name: "收录参考资料"
+  short_description: "把外部项目,文档,网页等参考资料分类收进项目,并维护登记,更新和废弃"
